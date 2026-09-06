@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sessão — diário de cinema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14171C;
+    --bg-alt:#1B1F26;
+    --bg-alt-2:#20242C;
+    --text:#EDE7D9;
+    --text-muted:#9B9A8F;
+    --accent:#C89B4A;
+    --accent-soft:#8A7245;
+    --clay:#6E5344;
+    --line:#31343C;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Libre Franklin', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+  a{color:inherit; text-decoration:none;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:20;
+    background:rgba(20,23,28,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:0.01em;
+  }
+  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--text-muted);}
+  .navlinks a:hover{color:var(--accent);}
+  .navlinks .cta{
+    color:var(--bg); background:var(--accent);
+    padding:8px 16px; border-radius:2px; font-weight:500;
+  }
+  .navlinks .cta:hover{background:#dcae5c;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 0 64px;
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:64px;
+    align-items:end;
+  }
+  .hero h1{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(38px, 5vw, 62px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    opacity:0;
+    animation:rise 0.9s 0.15s ease forwards;
+  }
+  .hero h1 em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--accent);
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .hero p.lede{
+    margin-top:24px;
+    max-width:46ch;
+    color:var(--text-muted);
+    font-size:17px;
+  }
+  .hero-meta{
+    font-size:13px;
+    color:var(--text-muted);
+    display:flex; flex-direction:column; gap:10px;
+    border-left:1px solid var(--line);
+    padding-left:24px;
+  }
+  .hero-meta strong{
+    display:block; color:var(--text);
+    font-family:'Fraunces', serif; font-size:15px; font-weight:500;
+    margin-bottom:2px;
+  }
+
+  /* ---------- LATEST / DIARY ENTRIES ---------- */
+  .latest{
+    padding:72px 0 56px;
+    border-bottom:1px solid var(--line);
+  }
+  .entries{
+    margin-top:8px;
+  }
+  .entry{
+    display:grid;
+    grid-template-columns:92px 1fr 88px;
+    gap:24px;
+    align-items:start;
+    padding:22px 0;
+    border-top:1px solid var(--line);
+  }
+  .entry:last-child{border-bottom:1px solid var(--line);}
+  .entry-date{
+    font-size:13px;
+    color:var(--text-muted);
+    letter-spacing:0.02em;
+    padding-top:3px;
+    text-transform:uppercase;
+  }
+  .entry-body h4{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:19px;
+    line-height:1.3;
+  }
+  .entry-body h4 .entry-meta{
+    font-family:'Libre Franklin',sans-serif;
+    font-weight:400;
+    font-style:normal;
+    font-size:13px;
+    color:var(--text-muted);
+    margin-left:10px;
+  }
+  .entry-body p{
+    margin-top:8px;
+    font-size:14.5px;
+    color:#c8c3b3;
+    line-height:1.55;
+    max-width:62ch;
+  }
+  .entry-tag{
+    justify-self:end;
+    font-size:11px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--accent);
+    border:1px solid var(--accent-soft);
+    border-radius:2px;
+    padding:4px 8px;
+    white-space:nowrap;
+    margin-top:4px;
+  }
+  .entry-tag.revi{
+    color:var(--text-muted);
+    border-color:var(--line);
+  }
+  @media (max-width:700px){
+    .entry{
+      grid-template-columns:1fr auto;
+      grid-template-areas:
+        "date tag"
+        "body body";
+      row-gap:8px;
+    }
+    .entry-date{grid-area:date;}
+    .entry-tag{grid-area:tag; justify-self:start; margin-top:0;}
+    .entry-body{grid-area:body;}
+  }
+
+  /* ---------- SPROCKET DIVIDER ---------- */
+  .sprocket{
+    display:flex; justify-content:space-between;
+    padding:0 32px; max-width:1180px; margin:0 auto;
+    overflow:hidden;
+  }
+  .sprocket span{
+    width:9px; height:9px; border-radius:2px;
+    background:var(--bg-alt); border:1px solid var(--line);
+    margin:14px 0;
+  }
+
+  /* ---------- COLLECTIONS ---------- */
+  .collection{
+    padding:72px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .col-head{
+    display:grid;
+    grid-template-columns:2fr 3fr;
+    gap:48px;
+    margin-bottom:44px;
+    align-items:baseline;
+  }
+  .col-num{
+    font-size:13px; color:var(--accent);
+    font-family:'Libre Franklin',sans-serif;
+    letter-spacing:0.04em;
+    margin-bottom:10px;
+  }
+  .col-head h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(26px,3vw,36px);
+    line-height:1.15;
+  }
+  .col-head p{
+    color:var(--text-muted);
+    font-size:15px;
+    max-width:52ch;
+  }
+
+  .films{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+  }
+  .film{
+    display:flex; flex-direction:column;
+  }
+  .poster{
+    aspect-ratio:2/3;
+    border-radius:2px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    padding:18px;
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.06);
+    transition:transform 0.35s ease;
+  }
+  .film:hover .poster{transform:translateY(-4px);}
+  .poster .year{
+    font-size:12px; letter-spacing:0.02em;
+    color:rgba(237,231,217,0.65);
+  }
+  .poster .title{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:19px;
+    line-height:1.2;
+    color:var(--text);
+  }
+  .film-meta{
+    margin-top:12px;
+  }
+  .film-meta .dir{
+    font-size:13px; color:var(--text-muted);
+  }
+  .film-meta .note{
+    margin-top:6px;
+    font-size:13.5px;
+    color:#c8c3b3;
+    line-height:1.5;
+  }
+
+  /* poster palettes, distinct per film — no repeated look */
+  .p1{background:linear-gradient(155deg,#3c2f2a,#1c1512);}
+  .p2{background:linear-gradient(155deg,#2a2f22,#141712);}
+  .p3{background:linear-gradient(155deg,#26232f,#131117);}
+  .p4{background:linear-gradient(155deg,#33261c,#171009);}
+  .p5{background:linear-gradient(155deg,#1e2c2c,#0f1717);}
+  .p6{background:linear-gradient(155deg,#2f2320,#151009);}
+  .p7{background:linear-gradient(155deg,#242a1e,#12150e);}
+  .p8{background:linear-gradient(155deg,#301f2b,#160f14);}
+  .p9{background:linear-gradient(155deg,#22262f,#101318);}
+  .p10{background:linear-gradient(155deg,#2c2818,#14110a);}
+  .p11{background:linear-gradient(155deg,#1f2a26,#0e1513);}
+  .p12{background:linear-gradient(155deg,#2a1f22,#130f11);}
+
+  /* ---------- REFERENCES / VIDEOS ---------- */
+  .references{
+    padding:72px 0;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt-2);
+  }
+  .references .col-head{margin-bottom:44px;}
+  .ref-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:36px 32px;
+  }
+  .ref-card{
+    display:flex; flex-direction:column;
+  }
+  .ref-video{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    background:#0b0d10;
+    border-radius:2px;
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .ref-video iframe{
+    position:absolute; inset:0;
+    width:100%; height:100%; border:0;
+  }
+  .ref-tag{
+    margin-top:14px;
+    font-size:12px;
+    color:var(--accent);
+    letter-spacing:0.01em;
+  }
+  .ref-card h4{
+    margin-top:6px;
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:17px;
+    line-height:1.35;
+  }
+  .ref-card .ref-channel{
+    font-size:13px;
+    color:var(--text-muted);
+    margin-top:4px;
+  }
+  .ref-card p.ref-note{
+    margin-top:10px;
+    font-size:14px;
+    color:#c8c3b3;
+    line-height:1.55;
+  }
+  @media (max-width:900px){
+    .ref-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- CURATOR NOTE ---------- */
+  .manifesto{
+    padding:80px 0;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-alt);
+  }
+  .manifesto .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+  }
+  .manifesto h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:28px;
+    line-height:1.3;
+  }
+  .manifesto p{
+    color:var(--text-muted);
+    font-size:15.5px;
+    margin-top:16px;
+  }
+  .signature{
+    margin-top:28px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:16px;
+    color:var(--accent);
+  }
+
+  /* ---------- SUBSCRIBE ---------- */
+  .subscribe{
+    padding:80px 0;
+    text-align:left;
+  }
+  .subscribe h2{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    font-size:clamp(28px,3.4vw,40px);
+    max-width:16ch;
+  }
+  .sub-form{
+    margin-top:28px;
+    display:flex;
+    gap:0;
+    max-width:440px;
+    border-bottom:1px solid var(--text-muted);
+    padding-bottom:10px;
+  }
+  .sub-form input{
+    flex:1;
+    background:transparent;
+    border:none;
+    color:var(--text);
+    font-size:16px;
+    font-family:'Libre Franklin',sans-serif;
+    outline:none;
+  }
+  .sub-form input::placeholder{color:var(--text-muted);}
+  .sub-form button{
+    background:none; border:none;
+    color:var(--accent);
+    font-size:15px; font-weight:500;
+    cursor:pointer;
+    font-family:'Libre Franklin',sans-serif;
+  }
+  .sub-form button:hover{color:#dcae5c;}
+  .subscribe .fine{
+    margin-top:14px; font-size:13px; color:var(--text-muted);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top:1px solid var(--line);
+    padding:32px 0;
+  }
+  footer .wrap{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:13px; color:var(--text-muted);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr; gap:32px;}
+    .hero-meta{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px; flex-direction:row; flex-wrap:wrap; gap:24px;}
+    .col-head{grid-template-columns:1fr; gap:16px;}
+    .films{grid-template-columns:repeat(2, 1fr);}
+    .manifesto .wrap{grid-template-columns:1fr; gap:32px;}
+    .navlinks{gap:16px; font-size:13px;}
+    .navlinks a:not(.cta){display:none;}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 20px;}
+    nav{padding:16px 20px;}
+    .films{grid-template-columns:repeat(2, 1fr); gap:14px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo">Sessão</div>
+    <div class="navlinks">
+      <a href="#anotacoes">Últimas anotações</a>
+      <a href="#colecoes">Coleções</a>
+      <a href="#referencias">Referências</a>
+      <a href="#manifesto">Sobre este diário</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Um filme por vez,<br>escolhido a dedo,<br><em>com contexto.</em></h1>
+      <p class="lede">Este é o meu diário de cinema: um jeito de me obrigar a ver mais filmes e registrar o que fica depois. Não é lista de recomendação — é o que eu de fato assisti, agrupado por afinidade, com anotações escritas na hora.</p>
+    </div>
+    <div class="hero-meta">
+      <div><strong>3</strong>coleções em andamento</div>
+      <div><strong>Sem agenda</strong>atualizo quando assisto algo novo</div>
+      <div><strong>Aberto</strong>qualquer um pode ler</div>
+    </div>
+  </div>
+</section>
+
+<section class="latest" id="anotacoes">
+  <div class="wrap">
+    <div class="col-head">
+      <div>
+        <div class="col-num">Diário</div>
+        <h2>Últimas anotações</h2>
+      </div>
+      <p>Ordem cronológica, sem curadoria — só o que assisti nas últimas semanas, com a impressão anotada no dia seguinte.</p>
+    </div>
+    <div class="entries">
+
+      <div class="entry">
+        <div class="entry-date">02 set</div>
+        <div class="entry-body">
+          <h4>Terra em Transe <span class="entry-meta">Glauber Rocha, 1967</span></h4>
+          <p>Um filme que grita antes de argumentar — achei cansativo em partes, mas a fotografia do final justifica a sessão inteira.</p>
+        </div>
+        <div class="entry-tag">1ª vez</div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">30 ago</div>
+        <div class="entry-body">
+          <h4>Stalker <span class="entry-meta">Andrei Tarkovsky, 1979</span></h4>
+          <p>Terceira vez e ainda não decidi se a Zona é metáfora de alguma coisa específica ou se resiste a virar metáfora de propósito.</p>
+        </div>
+        <div class="entry-tag revi">revi</div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">26 ago</div>
+        <div class="entry-body">
+          <h4>Bacurau <span class="entry-meta">Kleber Mendonça Filho e Juliano Dornelles, 2019</span></h4>
+          <p>Comecei achando que era um filme sobre um lugar e terminei achando que era sobre quem decide o que um lugar vale.</p>
+        </div>
+        <div class="entry-tag">1ª vez</div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">21 ago</div>
+        <div class="entry-body">
+          <h4>Fitzcarraldo <span class="entry-meta">Werner Herzog, 1982</span></h4>
+          <p>O barco subindo o morro é uma das imagens mais absurdas que já vi no cinema — e funciona exatamente por não explicar por quê.</p>
+        </div>
+        <div class="entry-tag">1ª vez</div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-date">15 ago</div>
+        <div class="entry-body">
+          <h4>O Espelho <span class="entry-meta">Andrei Tarkovsky, 1975</span></h4>
+          <p>Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa.</p>
+        </div>
+        <div class="entry-tag revi">revi</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="sprocket" aria-hidden="true">
+  <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<main id="colecoes">
+
+  <section class="collection">
+    <div class="wrap">
+      <div class="col-head">
+        <div>
+          <div class="col-num">Coleção 01</div>
+          <h2>Narradores que mentem<br>para si mesmos</h2>
+        </div>
+        <p>Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história. Quatro versões do mesmo mecanismo, décadas e continentes diferentes.</p>
+      </div>
+      <div class="films">
+        <div class="film">
+          <div class="poster p1">
+            <span class="year">1950 · Japão</span>
+            <span class="title">Rashomon</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Akira Kurosawa</div>
+            <div class="note">Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p2">
+            <span class="year">1999 · EUA</span>
+            <span class="title">Clube da Luta</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">David Fincher</div>
+            <div class="note">O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p3">
+            <span class="year">2000 · EUA</span>
+            <span class="title">Psicopata Americano</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Mary Harron</div>
+            <div class="note">A confissão mais explícita da tela é, também, a mais duvidosa — a violência é real ou é só vaidade narrada?</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p4">
+            <span class="year">1950 · EUA</span>
+            <span class="title">Crepúsculo dos Deuses</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Billy Wilder</div>
+            <div class="note">Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="collection">
+    <div class="wrap">
+      <div class="col-head">
+        <div>
+          <div class="col-num">Coleção 02</div>
+          <h2>Cinema como<br>arquivo da memória</h2>
+        </div>
+        <p>Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem. A memória aqui é técnica, não sentimento.</p>
+      </div>
+      <div class="films">
+        <div class="film">
+          <div class="poster p5">
+            <span class="year">1982 · EUA</span>
+            <span class="title">Blade Runner</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Ridley Scott</div>
+            <div class="note">Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p6">
+            <span class="year">2004 · EUA</span>
+            <span class="title">Brilho Eterno de uma Mente sem Lembranças</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Michel Gondry</div>
+            <div class="note">Apagar uma pessoa da memória, cena por cena, ao vivo — o esquecimento como processo, não como evento.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p7">
+            <span class="year">1962 · França</span>
+            <span class="title">La Jetée</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Chris Marker</div>
+            <div class="note">Um filme quase inteiro em fotografias congeladas — a memória como sequência de still frames, não de movimento.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p8">
+            <span class="year">1959 · França/Japão</span>
+            <span class="title">Hiroshima Meu Amor</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Alain Resnais</div>
+            <div class="note">Duas cidades, duas dores, sobrepostas na montagem até não se saber qual lembrança pertence a quem.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="collection">
+    <div class="wrap">
+      <div class="col-head">
+        <div>
+          <div class="col-num">Coleção 03</div>
+          <h2>Realismo<br>às margens</h2>
+        </div>
+        <p>Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la com precisão.</p>
+      </div>
+      <div class="films">
+        <div class="film">
+          <div class="poster p9">
+            <span class="year">1968 · Cuba</span>
+            <span class="title">Memórias do Subdesenvolvimento</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Tomás Gutiérrez Alea</div>
+            <div class="note">Um homem observa a revolução pela janela do próprio apartamento — testemunha e estranho ao mesmo tempo.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p10">
+            <span class="year">1985 · Brasil</span>
+            <span class="title">A Hora da Estrela</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Suzana Amaral</div>
+            <div class="note">Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p11">
+            <span class="year">1971 · Brasil</span>
+            <span class="title">Como Era Gostoso o Meu Francês</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Nelson Pereira dos Santos</div>
+            <div class="note">Antropofagia como método de narrar a colonização — devora-se o colonizador antes que ele conte a própria versão.</div>
+          </div>
+        </div>
+        <div class="film">
+          <div class="poster p12">
+            <span class="year">1970 · México</span>
+            <span class="title">A Montanha Sagrada</span>
+          </div>
+          <div class="film-meta">
+            <div class="dir">Alejandro Jodorowsky</div>
+            <div class="note">Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<section class="references" id="referencias">
+  <div class="wrap">
+    <div class="col-head">
+      <div>
+        <div class="col-num">Bastidores</div>
+        <h2>Referências em vídeo</h2>
+      </div>
+      <p>Os vídeos que alimentam a curadoria — canais que garimpam filme desconhecido, análises que reabrem um clássico. Ficam aqui como material de apoio para quando eu for escrever cada nota.</p>
+    </div>
+    <div class="ref-grid">
+
+      <div class="ref-card">
+        <div class="ref-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/ty22ikRAymA" title="8 filmes que você não viu mas precisa urgentemente — Refúgio Cult" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="ref-tag">Inspiração geral da curadoria</div>
+        <h4>8 filmes que você não viu mas precisa urgentemente</h4>
+        <div class="ref-channel">Refúgio Cult</div>
+        <p class="ref-note">O canal que deu o tom do Sessão: garimpo de cinema esquecido, sem ranking e sem nota — só o argumento de por que aquilo merece ser visto.</p>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/oILU27lMdK4" title="Rashomon: a ética em um mundo sem verdade" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="ref-tag">Para a Coleção 01 — Narradores</div>
+        <h4>Rashomon: a ética em um mundo sem verdade</h4>
+        <div class="ref-channel">análise sobre Akira Kurosawa</div>
+        <p class="ref-note">Liga o filme ao perspectivismo de Nietzsche — útil para escrever a nota sobre Rashomon sem repetir o óbvio "quatro versões da verdade".</p>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/k8fYIyzeoV8" title="Os detalhes que ninguém percebeu em Blade Runner" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="ref-tag">Para a Coleção 02 — Memória</div>
+        <h4>Os detalhes que ninguém percebeu em Blade Runner</h4>
+        <div class="ref-channel">análise de curiosidades e simbolismo</div>
+        <p class="ref-note">Levanta as pistas visuais da ambiguidade de Deckard — bom lastro para a nota sobre memória implantada como alibi.</p>
+      </div>
+
+      <div class="ref-card">
+        <div class="ref-video">
+          <iframe src="https://www.youtube-nocookie.com/embed/0T1fNsbzSek" title="Entendendo o filme A Hora da Estrela (final explicado)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="ref-tag">Para a Coleção 03 — Margens</div>
+        <h4>Entendendo o filme A Hora da Estrela (final explicado)</h4>
+        <div class="ref-channel">análise da adaptação de Clarice Lispector</div>
+        <p class="ref-note">Discute o destino de Macabéa e a mediação de Rodrigo S.M. — ponto de partida direto para a nota sobre o filme de Suzana Amaral.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="manifesto" id="manifesto">
+  <div class="wrap">
+    <div>
+      <h3>Isto é um diário, não uma vitrine.</h3>
+      <p>Comecei este registro para me obrigar a ver mais filmes — e a prestar atenção no que via. Cada coleção nasce de uma pergunta que eu mesmo estava tentando responder assistindo, não de um gênero ou de uma década.</p>
+    </div>
+    <div>
+      <p>As notas são escritas logo depois de assistir, para não perder o que senti na hora. Deixo aberto porque impressão de cinema rende mais compartilhada do que guardada numa gaveta — mas o critério aqui é sempre pessoal, nunca uma tentativa de agradar todo mundo.</p>
+      <div class="signature">— C.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Sessão — diário de cinema</span>
+    <span>Atualizado sem pressa, filme por filme</span>
+  </div>
+</footer>
+
+</body>
+</html>
