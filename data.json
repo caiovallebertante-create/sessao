@@ -96,6 +96,13 @@
           "year": "1997",
           "poster": "https://image.tmdb.org/t/p/w342/nEZWXLEMoimbgyhGX1JgOQJr7On.jpg",
           "note": "Abre os Olhos (1997, Alejandro Amenábar, Espanha) e Vanilla Sky (2001, Cameron Crowe, EUA). O remake segue o roteiro quase cena a cena, mas troca a aspereza espanhola por um verniz pop hollywoodiano."
+        },
+        {
+          "title": "Vanilla Sky",
+          "director": "Cameron Crowe",
+          "year": "2001",
+          "poster": "https://image.tmdb.org/t/p/w342/cAh2pCiNPftsY3aSqJuIOde7uWr.jpg",
+          "note": ""
         }
       ]
     }
