@@ -7,13 +7,6 @@
       "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
       "films": [
         {
-          "title": "Brilho Eterno de uma Mente sem Lembranças",
-          "director": "Michel Gondry",
-          "year": "2004",
-          "poster": "",
-          "note": "Apagar uma pessoa da memória, cena por cena, ao vivo."
-        },
-        {
           "title": "La Jetée",
           "director": "Chris Marker",
           "year": "1962",
