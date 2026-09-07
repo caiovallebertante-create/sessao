@@ -1,0 +1,31 @@
+name: "📺 Novo vídeo de referência"
+description: Adicionar um vídeo do YouTube que inspirou uma coleção ou um filme
+title: "[video] novo vídeo de referência"
+labels: ["video"]
+body:
+  - type: input
+    id: youtube_id
+    attributes:
+      label: ID do vídeo do YouTube
+    validations:
+      required: true
+  - type: input
+    id: titulo
+    attributes:
+      label: Título do vídeo
+  - type: input
+    id: canal
+    attributes:
+      label: Canal
+  - type: input
+    id: colecao_relacionada
+    attributes:
+      label: ID da coleção relacionada (opcional)
+  - type: input
+    id: filme_relacionado
+    attributes:
+      label: Nome do filme relacionado (opcional)
+  - type: textarea
+    id: nota
+    attributes:
+      label: Por que esse vídeo é referência
