@@ -236,7 +236,15 @@
       "id": "uma-obsessao-um-seculo-de-cinema-robos-e-inteligencia-artificial",
       "name": "Uma obsessão, um século de cinema: robôs e inteligência artificial",
       "description": "O mesmo medo/fascínio humano revisitado a cada geração de tecnologia e de linguagem cinematográfica.",
-      "films": []
+      "films": [
+        {
+          "title": "Metrópolis",
+          "director": "Fritz Lang",
+          "year": "1927",
+          "poster": "https://image.tmdb.org/t/p/w342/xBx21HvGJCb15PKWkyb7uc435Wx.jpg",
+          "note": "Cinema mudo, expressionista; a robô Maria como origem do arquétipo."
+        }
+      ]
     }
   ],
   "videos": [
