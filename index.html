@@ -28,444 +28,199 @@
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
-  @media (prefers-reduced-motion: reduce){
-    *{animation:none !important; transition:none !important;}
-  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
   a{color:inherit; text-decoration:none;}
   img{max-width:100%; display:block;}
   .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
-
+ 
   /* ---------- NAV ---------- */
-  header{
-    position:sticky; top:0; z-index:20;
-    background:rgba(20,23,28,0.88);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);
-  }
-  nav{
-    display:flex; align-items:center; justify-content:space-between;
-    padding:20px 32px;
-    max-width:1180px; margin:0 auto;
-  }
-  .logo{
-    font-family:'Fraunces', serif;
-    font-size:22px;
-    font-weight:600;
-    letter-spacing:0.01em;
-  }
-  .navlinks{display:flex; gap:32px; font-size:14px; color:var(--text-muted);}
+  header{position:sticky; top:0; z-index:20; background:rgba(20,23,28,0.9); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
+  nav{display:flex; align-items:center; justify-content:space-between; padding:20px 32px; max-width:1180px; margin:0 auto; flex-wrap:wrap; gap:12px;}
+  .logo{font-family:'Fraunces', serif; font-size:22px; font-weight:600;}
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--text-muted); flex-wrap:wrap;}
   .navlinks a:hover{color:var(--accent);}
-  .navlinks .cta{
-    color:var(--bg); background:var(--accent);
-    padding:8px 16px; border-radius:2px; font-weight:500;
-  }
-  .navlinks .cta:hover{background:#dcae5c;}
-
+ 
   /* ---------- HERO ---------- */
-  .hero{
-    padding:96px 0 64px;
-    border-bottom:1px solid var(--line);
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.1fr 0.9fr;
-    gap:64px;
-    align-items:end;
-  }
-  .hero h1{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:clamp(38px, 5vw, 62px);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    opacity:0;
-    animation:rise 0.9s 0.15s ease forwards;
-  }
-  .hero h1 em{
-    font-style:italic;
-    font-weight:400;
-    color:var(--accent);
-  }
-  @keyframes rise{
-    from{opacity:0; transform:translateY(14px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-  .hero p.lede{
-    margin-top:24px;
-    max-width:46ch;
-    color:var(--text-muted);
-    font-size:17px;
-  }
-  .hero-meta{
-    font-size:13px;
-    color:var(--text-muted);
-    display:flex; flex-direction:column; gap:10px;
-    border-left:1px solid var(--line);
-    padding-left:24px;
-  }
-  .hero-meta strong{
-    display:block; color:var(--text);
-    font-family:'Fraunces', serif; font-size:15px; font-weight:500;
-    margin-bottom:2px;
-  }
-
-  /* ---------- LATEST / DIARY ENTRIES ---------- */
-  .latest{
-    padding:72px 0 56px;
-    border-bottom:1px solid var(--line);
-  }
-  .entries{
-    margin-top:8px;
-  }
+  .hero{padding:88px 0 56px; border-bottom:1px solid var(--line);}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:end;}
+  .hero h1{font-family:'Fraunces', serif; font-weight:500; font-size:clamp(36px,5vw,58px); line-height:1.08; letter-spacing:-0.01em;}
+  .hero h1 em{font-style:italic; font-weight:400; color:var(--accent);}
+  .hero p.lede{margin-top:22px; max-width:46ch; color:var(--text-muted); font-size:17px;}
+  .hero-meta{font-size:13px; color:var(--text-muted); display:flex; flex-direction:column; gap:10px; border-left:1px solid var(--line); padding-left:24px;}
+  .hero-meta strong{display:block; color:var(--text); font-family:'Fraunces', serif; font-size:15px; font-weight:500; margin-bottom:2px;}
+ 
+  /* ---------- SPROCKET ---------- */
+  .sprocket{display:flex; justify-content:space-between; padding:0 32px; max-width:1180px; margin:0 auto; overflow:hidden;}
+  .sprocket span{width:9px; height:9px; border-radius:2px; background:var(--bg-alt); border:1px solid var(--line); margin:14px 0;}
+ 
+  /* ---------- SECTION HEAD ---------- */
+  .col-head{display:grid; grid-template-columns:2fr 3fr; gap:48px; margin-bottom:40px; align-items:baseline;}
+  .col-num{font-size:13px; color:var(--accent); letter-spacing:0.04em; margin-bottom:10px;}
+  .col-head h2{font-family:'Fraunces', serif; font-weight:500; font-size:clamp(26px,3vw,36px); line-height:1.15;}
+  .col-head p{color:var(--text-muted); font-size:15px; max-width:52ch;}
+ 
+  /* ---------- LATEST / DIARY ---------- */
+  .latest{padding:64px 0 40px; border-bottom:1px solid var(--line);}
+  .entries{margin-top:8px;}
   .entry{
     display:grid;
-    grid-template-columns:92px 1fr 88px;
-    gap:24px;
-    align-items:start;
-    padding:22px 0;
-    border-top:1px solid var(--line);
+    grid-template-columns:64px 90px 1fr 90px;
+    grid-template-areas:"poster date body tag";
+    gap:20px; align-items:start; padding:20px 0; border-top:1px solid var(--line);
   }
   .entry:last-child{border-bottom:1px solid var(--line);}
-  .entry-date{
-    font-size:13px;
-    color:var(--text-muted);
-    letter-spacing:0.02em;
-    padding-top:3px;
-    text-transform:uppercase;
-  }
-  .entry-body h4{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:19px;
-    line-height:1.3;
-  }
-  .entry-body h4 .entry-meta{
-    font-family:'Libre Franklin',sans-serif;
-    font-weight:400;
-    font-style:normal;
-    font-size:13px;
-    color:var(--text-muted);
-    margin-left:10px;
-  }
-  .entry-body p{
-    margin-top:8px;
-    font-size:14.5px;
-    color:#c8c3b3;
-    line-height:1.55;
-    max-width:62ch;
-  }
-  .entry-tag{
-    justify-self:end;
-    font-size:11px;
-    letter-spacing:0.03em;
-    text-transform:uppercase;
-    color:var(--accent);
-    border:1px solid var(--accent-soft);
-    border-radius:2px;
-    padding:4px 8px;
-    white-space:nowrap;
-    margin-top:4px;
-  }
-  .entry-tag.revi{
-    color:var(--text-muted);
-    border-color:var(--line);
-  }
+  .entry-poster{grid-area:poster; width:64px; height:88px; border-radius:2px; overflow:hidden; background:var(--bg-alt); border:1px solid var(--line); flex-shrink:0;}
+  .entry-poster img{width:100%; height:100%; object-fit:cover; display:block;}
+  .entry-date{grid-area:date; font-size:13px; color:var(--text-muted); letter-spacing:0.02em; padding-top:3px; text-transform:uppercase;}
+  .entry-body{grid-area:body;}
+  .entry-body h4{font-family:'Fraunces', serif; font-weight:500; font-size:19px; line-height:1.3;}
+  .entry-body h4 .entry-meta{font-family:'Libre Franklin',sans-serif; font-weight:400; font-size:13px; color:var(--text-muted); margin-left:10px;}
+  .entry-body p{margin-top:8px; font-size:14.5px; color:#c8c3b3; line-height:1.55; max-width:62ch;}
+  .entry-tag{grid-area:tag; justify-self:end; font-size:11px; letter-spacing:0.03em; text-transform:uppercase; border-radius:2px; padding:4px 8px; white-space:nowrap; margin-top:4px; border:1px solid var(--line); color:var(--text-muted);}
+  .entry-tag.tag-first{color:var(--accent); border-color:var(--accent-soft);}
+  .entry-tag.tag-drop{color:#c9807a; border-color:#6b4440;}
+  .entry-tag.tag-want{color:var(--text-muted); border-style:dashed;}
   @media (max-width:700px){
-    .entry{
-      grid-template-columns:1fr auto;
-      grid-template-areas:
-        "date tag"
-        "body body";
-      row-gap:8px;
-    }
-    .entry-date{grid-area:date;}
-    .entry-tag{grid-area:tag; justify-self:start; margin-top:0;}
-    .entry-body{grid-area:body;}
+    .entry{grid-template-columns:52px 1fr auto; grid-template-areas:"poster date tag" "poster body body"; row-gap:8px;}
+    .entry-poster{width:52px; height:72px;}
+    .entry-tag{margin-top:0;}
   }
-
-  /* ---------- SPROCKET DIVIDER ---------- */
-  .sprocket{
-    display:flex; justify-content:space-between;
-    padding:0 32px; max-width:1180px; margin:0 auto;
-    overflow:hidden;
-  }
-  .sprocket span{
-    width:9px; height:9px; border-radius:2px;
-    background:var(--bg-alt); border:1px solid var(--line);
-    margin:14px 0;
-  }
-
+ 
   /* ---------- COLLECTIONS ---------- */
-  .collection{
-    padding:72px 0;
-    border-bottom:1px solid var(--line);
-  }
-  .col-head{
-    display:grid;
-    grid-template-columns:2fr 3fr;
-    gap:48px;
-    margin-bottom:44px;
-    align-items:baseline;
-  }
-  .col-num{
-    font-size:13px; color:var(--accent);
-    font-family:'Libre Franklin',sans-serif;
-    letter-spacing:0.04em;
-    margin-bottom:10px;
-  }
-  .col-head h2{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:clamp(26px,3vw,36px);
-    line-height:1.15;
-  }
-  .col-head p{
-    color:var(--text-muted);
-    font-size:15px;
-    max-width:52ch;
-  }
-
-  .films{
-    display:grid;
-    grid-template-columns:repeat(4, 1fr);
-    gap:20px;
-  }
-  .film{
-    display:flex; flex-direction:column;
-  }
+  .collection{padding:64px 0; border-bottom:1px solid var(--line);}
+  .films{display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;}
+  .film{display:flex; flex-direction:column;}
   .poster{
-    aspect-ratio:2/3;
-    border-radius:2px;
-    display:flex; flex-direction:column; justify-content:space-between;
-    padding:18px;
-    position:relative;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,0.06);
-    transition:transform 0.35s ease;
+    position:relative; aspect-ratio:2/3; border-radius:2px; display:flex; flex-direction:column; justify-content:space-between;
+    padding:18px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); transition:transform 0.35s ease;
   }
   .film:hover .poster{transform:translateY(-4px);}
-  .poster .year{
-    font-size:12px; letter-spacing:0.02em;
-    color:rgba(237,231,217,0.65);
-  }
-  .poster .title{
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-weight:500;
-    font-size:19px;
-    line-height:1.2;
-    color:var(--text);
-  }
-  .film-meta{
-    margin-top:12px;
-  }
-  .film-meta .dir{
-    font-size:13px; color:var(--text-muted);
-  }
-  .film-meta .note{
-    margin-top:6px;
-    font-size:13.5px;
-    color:#c8c3b3;
-    line-height:1.5;
-  }
-
-  /* poster palettes, distinct per film — no repeated look */
-  .p1{background:linear-gradient(155deg,#3c2f2a,#1c1512);}
-  .p2{background:linear-gradient(155deg,#2a2f22,#141712);}
-  .p3{background:linear-gradient(155deg,#26232f,#131117);}
-  .p4{background:linear-gradient(155deg,#33261c,#171009);}
-  .p5{background:linear-gradient(155deg,#1e2c2c,#0f1717);}
-  .p6{background:linear-gradient(155deg,#2f2320,#151009);}
-  .p7{background:linear-gradient(155deg,#242a1e,#12150e);}
-  .p8{background:linear-gradient(155deg,#301f2b,#160f14);}
-  .p9{background:linear-gradient(155deg,#22262f,#101318);}
-  .p10{background:linear-gradient(155deg,#2c2818,#14110a);}
-  .p11{background:linear-gradient(155deg,#1f2a26,#0e1513);}
-  .p12{background:linear-gradient(155deg,#2a1f22,#130f11);}
-
+  .poster.has-image{padding:0;}
+  .poster.has-image img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;}
+  .poster.has-image .poster-scrim{position:absolute; inset:0; background:linear-gradient(to top, rgba(8,8,8,0.88), rgba(8,8,8,0) 55%);}
+  .poster.has-image .poster-overlay{position:relative; z-index:1; height:100%; display:flex; flex-direction:column; justify-content:flex-end; padding:16px;}
+  .poster .year{font-size:12px; color:rgba(237,231,217,0.65);}
+  .poster .title{font-family:'Fraunces', serif; font-style:italic; font-weight:500; font-size:19px; line-height:1.2; color:var(--text);}
+  .film-meta{margin-top:12px;}
+  .film-meta .dir{font-size:13px; color:var(--text-muted);}
+  .film-meta .note{margin-top:6px; font-size:13.5px; color:#c8c3b3; line-height:1.5;}
+  .p1{background:linear-gradient(155deg,#3c2f2a,#1c1512);} .p2{background:linear-gradient(155deg,#2a2f22,#141712);}
+  .p3{background:linear-gradient(155deg,#26232f,#131117);} .p4{background:linear-gradient(155deg,#33261c,#171009);}
+  .p5{background:linear-gradient(155deg,#1e2c2c,#0f1717);} .p6{background:linear-gradient(155deg,#2f2320,#151009);}
+  .p7{background:linear-gradient(155deg,#242a1e,#12150e);} .p8{background:linear-gradient(155deg,#301f2b,#160f14);}
+  .p9{background:linear-gradient(155deg,#22262f,#101318);} .p10{background:linear-gradient(155deg,#2c2818,#14110a);}
+  .p11{background:linear-gradient(155deg,#1f2a26,#0e1513);} .p12{background:linear-gradient(155deg,#2a1f22,#130f11);}
+  @media (max-width:900px){ .films{grid-template-columns:repeat(2, 1fr);} }
+ 
   /* ---------- REFERENCES / VIDEOS ---------- */
-  .references{
-    padding:72px 0;
-    border-bottom:1px solid var(--line);
-    background:var(--bg-alt-2);
+  .references{padding:64px 0; border-bottom:1px solid var(--line); background:var(--bg-alt-2);}
+  .video-filter{display:flex; align-items:center; gap:12px; margin-bottom:28px; flex-wrap:wrap;}
+  .video-filter label{font-size:12px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.03em;}
+  .ref-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:36px 32px;}
+  .ref-card{display:flex; flex-direction:column;}
+  .ref-video{position:relative; width:100%; aspect-ratio:16/9; background:#0b0d10; border-radius:2px; overflow:hidden; border:1px solid var(--line);}
+  .ref-video iframe{position:absolute; inset:0; width:100%; height:100%; border:0;}
+  .video-badge{display:inline-block; font-size:11px; color:var(--accent); border:1px solid var(--accent-soft); border-radius:2px; padding:3px 8px; margin-right:6px; margin-top:12px;}
+  .video-badge.film{color:var(--text-muted); border-color:var(--line);}
+  .ref-card h4{margin-top:8px; font-family:'Fraunces', serif; font-weight:500; font-style:italic; font-size:17px; line-height:1.35;}
+  .ref-card .ref-channel{font-size:13px; color:var(--text-muted); margin-top:4px;}
+  .ref-card p.ref-note{margin-top:10px; font-size:14px; color:#c8c3b3; line-height:1.55;}
+  @media (max-width:900px){ .ref-grid{grid-template-columns:1fr;} }
+ 
+  /* ---------- ADMIN / EDITOR PANELS ---------- */
+  .admin-panel{margin-top:36px; border:1px dashed var(--line); border-radius:4px; background:var(--bg-alt);}
+  .admin-panel summary{cursor:pointer; padding:16px 20px; font-size:14px; color:var(--accent); list-style:none; display:flex; align-items:center; gap:8px; user-select:none;}
+  .admin-panel summary::-webkit-details-marker{display:none;}
+  .admin-panel summary::before{content:'+'; font-size:16px; width:16px;}
+  .admin-panel[open] summary::before{content:'–';}
+  .admin-body{padding:4px 20px 26px;}
+  .admin-sub{font-size:12px; color:var(--text-muted); margin:-4px 0 18px; line-height:1.5;}
+  .field{margin-bottom:16px;}
+  .field label{display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.03em;}
+  .field input[type=text], .field input[type=date], .field input[type=url], .field textarea, .field select{
+    width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text);
+    padding:10px 12px; font-family:'Libre Franklin',sans-serif; font-size:14px; border-radius:2px;
   }
-  .references .col-head{margin-bottom:44px;}
-  .ref-grid{
-    display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    gap:36px 32px;
-  }
-  .ref-card{
-    display:flex; flex-direction:column;
-  }
-  .ref-video{
-    position:relative;
-    width:100%;
-    aspect-ratio:16/9;
-    background:#0b0d10;
-    border-radius:2px;
-    overflow:hidden;
-    border:1px solid var(--line);
-  }
-  .ref-video iframe{
-    position:absolute; inset:0;
-    width:100%; height:100%; border:0;
-  }
-  .ref-tag{
-    margin-top:14px;
-    font-size:12px;
-    color:var(--accent);
-    letter-spacing:0.01em;
-  }
-  .ref-card h4{
-    margin-top:6px;
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-style:italic;
-    font-size:17px;
-    line-height:1.35;
-  }
-  .ref-card .ref-channel{
-    font-size:13px;
-    color:var(--text-muted);
-    margin-top:4px;
-  }
-  .ref-card p.ref-note{
-    margin-top:10px;
-    font-size:14px;
-    color:#c8c3b3;
-    line-height:1.55;
-  }
+  .field textarea{resize:vertical; min-height:64px;}
+  .field-row{display:flex; gap:14px; flex-wrap:wrap;}
+  .field-row .field{flex:1; min-width:160px;}
+  .btn{background:var(--accent); color:var(--bg); border:none; padding:10px 18px; font-size:14px; font-weight:500; border-radius:2px; cursor:pointer;}
+  .btn:hover{background:#dcae5c;}
+  .btn-ghost{background:none; border:1px solid var(--line); color:var(--text-muted);}
+  .btn-ghost:hover{color:var(--text); border-color:var(--text-muted);}
+  .search-wrap{position:relative;}
+  .search-results{display:none; position:relative; margin-top:6px; border:1px solid var(--line); border-radius:2px; max-height:240px; overflow-y:auto; background:var(--bg); z-index:5;}
+  .search-result-item{display:flex; gap:10px; align-items:center; padding:8px 10px; cursor:pointer; border-bottom:1px solid var(--line); font-size:13px;}
+  .search-result-item:last-child{border-bottom:none;}
+  .search-result-item:hover{background:var(--bg-alt-2);}
+  .search-result-item img{width:30px; height:44px; object-fit:cover; border-radius:1px; background:var(--bg-alt-2);}
+  .sri-year{color:var(--text-muted); font-size:12px;}
+  .film-preview{display:none; margin-top:12px; gap:14px; padding:12px; border:1px solid var(--line); border-radius:2px; background:var(--bg);}
+  .film-preview img{width:56px; height:82px; object-fit:cover; border-radius:2px;}
+  .film-preview h5{font-family:'Fraunces',serif; font-weight:500; font-size:15px;}
+  .film-preview .fp-meta{font-size:12px; color:var(--text-muted); margin-top:2px;}
+  .tag-picker{display:flex; gap:8px; flex-wrap:wrap;}
+  .tag-picker button{padding:7px 13px; font-size:12px; border-radius:2px; border:1px solid var(--line); background:none; color:var(--text-muted); cursor:pointer;}
+  .tag-picker button.active{border-color:var(--accent); color:var(--accent);}
+  .pending-list{margin-top:14px; display:flex; flex-direction:column; gap:8px;}
+  .pending-item{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); border-radius:2px; font-size:13px;}
+  .pending-item button{background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; flex-shrink:0;}
+  .pending-item button:hover{color:#c9807a;}
+  .code-output{display:none; margin-top:18px;}
+  .code-output pre{background:#0b0d10; border:1px solid var(--line); border-radius:2px; padding:14px; font-size:12px; color:#cdeecb; overflow-x:auto; max-height:260px; white-space:pre-wrap; word-break:break-word;}
+  .copy-row{display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:12px; flex-wrap:wrap;}
+  .hint{font-size:12.5px; color:var(--text-muted); margin-top:6px; line-height:1.55;}
+  .key-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .key-status{font-size:12px; color:var(--text-muted);}
+  .key-status.ok{color:var(--accent);}
+ 
+  /* ---------- MANIFESTO ---------- */
+  .manifesto{padding:76px 0; border-bottom:1px solid var(--line); background:var(--bg-alt);}
+  .manifesto .wrap{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
+  .manifesto h3{font-family:'Fraunces', serif; font-weight:500; font-size:28px; line-height:1.3;}
+  .manifesto p{color:var(--text-muted); font-size:15.5px; margin-top:16px;}
+  .signature{margin-top:26px; font-family:'Fraunces', serif; font-style:italic; font-size:16px; color:var(--accent);}
+ 
+  footer{border-top:1px solid var(--line); padding:30px 0;}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-muted); flex-wrap:wrap; gap:8px;}
+ 
   @media (max-width:900px){
-    .ref-grid{grid-template-columns:1fr;}
+    .hero-grid{grid-template-columns:1fr; gap:28px;}
+    .hero-meta{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:18px; flex-direction:row; flex-wrap:wrap; gap:22px;}
+    .col-head{grid-template-columns:1fr; gap:14px;}
+    .manifesto .wrap{grid-template-columns:1fr; gap:28px;}
   }
-
-  /* ---------- CURATOR NOTE ---------- */
-  .manifesto{
-    padding:80px 0;
-    border-bottom:1px solid var(--line);
-    background:var(--bg-alt);
-  }
-  .manifesto .wrap{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:64px;
-  }
-  .manifesto h3{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:28px;
-    line-height:1.3;
-  }
-  .manifesto p{
-    color:var(--text-muted);
-    font-size:15.5px;
-    margin-top:16px;
-  }
-  .signature{
-    margin-top:28px;
-    font-family:'Fraunces', serif;
-    font-style:italic;
-    font-size:16px;
-    color:var(--accent);
-  }
-
-  /* ---------- SUBSCRIBE ---------- */
-  .subscribe{
-    padding:80px 0;
-    text-align:left;
-  }
-  .subscribe h2{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    font-size:clamp(28px,3.4vw,40px);
-    max-width:16ch;
-  }
-  .sub-form{
-    margin-top:28px;
-    display:flex;
-    gap:0;
-    max-width:440px;
-    border-bottom:1px solid var(--text-muted);
-    padding-bottom:10px;
-  }
-  .sub-form input{
-    flex:1;
-    background:transparent;
-    border:none;
-    color:var(--text);
-    font-size:16px;
-    font-family:'Libre Franklin',sans-serif;
-    outline:none;
-  }
-  .sub-form input::placeholder{color:var(--text-muted);}
-  .sub-form button{
-    background:none; border:none;
-    color:var(--accent);
-    font-size:15px; font-weight:500;
-    cursor:pointer;
-    font-family:'Libre Franklin',sans-serif;
-  }
-  .sub-form button:hover{color:#dcae5c;}
-  .subscribe .fine{
-    margin-top:14px; font-size:13px; color:var(--text-muted);
-  }
-
-  /* ---------- FOOTER ---------- */
-  footer{
-    border-top:1px solid var(--line);
-    padding:32px 0;
-  }
-  footer .wrap{
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:13px; color:var(--text-muted);
-  }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:900px){
-    .hero-grid{grid-template-columns:1fr; gap:32px;}
-    .hero-meta{border-left:none; padding-left:0; border-top:1px solid var(--line); padding-top:20px; flex-direction:row; flex-wrap:wrap; gap:24px;}
-    .col-head{grid-template-columns:1fr; gap:16px;}
-    .films{grid-template-columns:repeat(2, 1fr);}
-    .manifesto .wrap{grid-template-columns:1fr; gap:32px;}
-    .navlinks{gap:16px; font-size:13px;}
-    .navlinks a:not(.cta){display:none;}
-  }
-  @media (max-width:560px){
-    .wrap{padding:0 20px;}
-    nav{padding:16px 20px;}
-    .films{grid-template-columns:repeat(2, 1fr); gap:14px;}
-  }
+  @media (max-width:560px){ .wrap{padding:0 20px;} nav{padding:16px 20px;} }
 </style>
 </head>
 <body>
-
+ 
 <header>
   <nav>
     <div class="logo">Sessão</div>
     <div class="navlinks">
-      <a href="#anotacoes">Últimas anotações</a>
+      <a href="#anotacoes">Diário</a>
       <a href="#colecoes">Coleções</a>
       <a href="#referencias">Referências</a>
-      <a href="#manifesto">Sobre este diário</a>
+      <a href="#manifesto">Sobre</a>
     </div>
   </nav>
 </header>
-
+ 
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
       <h1>Um filme por vez,<br>escolhido a dedo,<br><em>com contexto.</em></h1>
-      <p class="lede">Este é o meu diário de cinema: um jeito de me obrigar a ver mais filmes e registrar o que fica depois. Não é lista de recomendação — é o que eu de fato assisti, agrupado por afinidade, com anotações escritas na hora.</p>
+      <p class="lede">Este é o meu diário de cinema: um jeito de me obrigar a ver mais filmes e registrar o que fica depois. Agrupado por afinidade, com anotações escritas na hora.</p>
     </div>
     <div class="hero-meta">
-      <div><strong>3</strong>coleções em andamento</div>
+      <div><strong id="stat-collections">—</strong>coleções em andamento</div>
       <div><strong>Sem agenda</strong>atualizo quando assisto algo novo</div>
       <div><strong>Aberto</strong>qualquer um pode ler</div>
     </div>
   </div>
 </section>
-
+ 
 <section class="latest" id="anotacoes">
   <div class="wrap">
     <div class="col-head">
@@ -473,303 +228,642 @@
         <div class="col-num">Diário</div>
         <h2>Últimas anotações</h2>
       </div>
-      <p>Ordem cronológica, sem curadoria — só o que assisti nas últimas semanas, com a impressão anotada no dia seguinte.</p>
+      <p>Ordem cronológica, sem curadoria — só o que assisti, com a impressão anotada no dia seguinte.</p>
     </div>
-    <div class="entries">
-
-      <div class="entry">
-        <div class="entry-date">02 set</div>
-        <div class="entry-body">
-          <h4>Terra em Transe <span class="entry-meta">Glauber Rocha, 1967</span></h4>
-          <p>Um filme que grita antes de argumentar — achei cansativo em partes, mas a fotografia do final justifica a sessão inteira.</p>
+ 
+    <div class="entries" id="diary-list"></div>
+ 
+    <details class="admin-panel">
+      <summary>Adicionar filme ao diário</summary>
+      <div class="admin-body">
+        <p class="admin-sub">Painel de uso pessoal — busca o filme numa base de dados real, você preenche a nota e ele gera o código pra colar no arquivo.</p>
+ 
+        <div class="field key-field">
+          <label>Chave da API TMDB (grátis, salva só neste navegador)</label>
+          <div class="key-row">
+            <input type="text" id="tmdb-key-input" placeholder="cole sua chave aqui">
+            <button class="btn-ghost btn" id="tmdb-key-save" type="button">Salvar</button>
+            <span class="key-status" id="tmdb-key-status">verificando…</span>
+          </div>
+          <p class="hint">Pegue grátis em themoviedb.org → crie uma conta → Settings → API → solicite uma chave "Developer". Sem isso a busca automática não funciona.</p>
         </div>
-        <div class="entry-tag">1ª vez</div>
-      </div>
-
-      <div class="entry">
-        <div class="entry-date">30 ago</div>
-        <div class="entry-body">
-          <h4>Stalker <span class="entry-meta">Andrei Tarkovsky, 1979</span></h4>
-          <p>Terceira vez e ainda não decidi se a Zona é metáfora de alguma coisa específica ou se resiste a virar metáfora de propósito.</p>
+ 
+        <div class="field search-wrap">
+          <label>Buscar filme</label>
+          <input type="text" id="diary-search" placeholder="digite o nome do filme...">
+          <div class="search-results" id="diary-results"></div>
+          <div class="film-preview" id="diary-preview"></div>
         </div>
-        <div class="entry-tag revi">revi</div>
-      </div>
-
-      <div class="entry">
-        <div class="entry-date">26 ago</div>
-        <div class="entry-body">
-          <h4>Bacurau <span class="entry-meta">Kleber Mendonça Filho e Juliano Dornelles, 2019</span></h4>
-          <p>Comecei achando que era um filme sobre um lugar e terminei achando que era sobre quem decide o que um lugar vale.</p>
+ 
+        <div class="field-row">
+          <div class="field">
+            <label>Data que assisti</label>
+            <input type="date" id="diary-date">
+          </div>
+          <div class="field">
+            <label>Como foi</label>
+            <div class="tag-picker" id="diary-tag-picker">
+              <button type="button" data-tag="1a" class="active">1ª vez</button>
+              <button type="button" data-tag="revi">revi</button>
+              <button type="button" data-tag="abandonei">abandonei</button>
+              <button type="button" data-tag="rever">quero rever</button>
+            </div>
+          </div>
         </div>
-        <div class="entry-tag">1ª vez</div>
-      </div>
-
-      <div class="entry">
-        <div class="entry-date">21 ago</div>
-        <div class="entry-body">
-          <h4>Fitzcarraldo <span class="entry-meta">Werner Herzog, 1982</span></h4>
-          <p>O barco subindo o morro é uma das imagens mais absurdas que já vi no cinema — e funciona exatamente por não explicar por quê.</p>
+ 
+        <div class="field">
+          <label>Sua nota</label>
+          <textarea id="diary-note" placeholder="o que ficou depois de ver..."></textarea>
         </div>
-        <div class="entry-tag">1ª vez</div>
-      </div>
-
-      <div class="entry">
-        <div class="entry-date">15 ago</div>
-        <div class="entry-body">
-          <h4>O Espelho <span class="entry-meta">Andrei Tarkovsky, 1975</span></h4>
-          <p>Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa.</p>
+ 
+        <button class="btn" id="diary-generate" type="button">Gerar código</button>
+ 
+        <div class="code-output" id="diary-code">
+          <pre></pre>
+          <div class="copy-row">
+            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
+            <span class="hint">Cole dentro de <code>diary: [</code>, logo após o comentário "NOVAS ENTRADAS AQUI".</span>
+          </div>
         </div>
-        <div class="entry-tag revi">revi</div>
       </div>
-
-    </div>
+    </details>
   </div>
 </section>
-
+ 
 <div class="sprocket" aria-hidden="true">
   <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
 </div>
-
+ 
 <main id="colecoes">
-
-  <section class="collection">
-    <div class="wrap">
-      <div class="col-head">
-        <div>
-          <div class="col-num">Coleção 01</div>
-          <h2>Narradores que mentem<br>para si mesmos</h2>
-        </div>
-        <p>Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história. Quatro versões do mesmo mecanismo, décadas e continentes diferentes.</p>
+  <div class="wrap" style="padding-top:64px;">
+    <div class="col-head" style="margin-bottom:0;">
+      <div>
+        <div class="col-num">Coleções</div>
+        <h2>Curadoria por afinidade</h2>
       </div>
-      <div class="films">
-        <div class="film">
-          <div class="poster p1">
-            <span class="year">1950 · Japão</span>
-            <span class="title">Rashomon</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Akira Kurosawa</div>
-            <div class="note">Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome.</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p2">
-            <span class="year">1999 · EUA</span>
-            <span class="title">Clube da Luta</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">David Fincher</div>
-            <div class="note">O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir.</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p3">
-            <span class="year">2000 · EUA</span>
-            <span class="title">Psicopata Americano</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Mary Harron</div>
-            <div class="note">A confissão mais explícita da tela é, também, a mais duvidosa — a violência é real ou é só vaidade narrada?</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p4">
-            <span class="year">1950 · EUA</span>
-            <span class="title">Crepúsculo dos Deuses</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Billy Wilder</div>
-            <div class="note">Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico.</div>
-          </div>
-        </div>
-      </div>
+      <p>Grupos de filmes que respondem a uma pergunta específica — não um gênero, não uma década.</p>
     </div>
-  </section>
-
-  <section class="collection">
-    <div class="wrap">
-      <div class="col-head">
-        <div>
-          <div class="col-num">Coleção 02</div>
-          <h2>Cinema como<br>arquivo da memória</h2>
+  </div>
+ 
+  <div id="collections-container"></div>
+ 
+  <div class="wrap" style="padding:0 32px 64px;">
+    <details class="admin-panel">
+      <summary>Criar nova coleção</summary>
+      <div class="admin-body">
+        <p class="admin-sub">Dê um nome e uma descrição, adicione os filmes um a um (com nota individual) e gere o código da coleção inteira.</p>
+ 
+        <div class="field">
+          <label>Nome da coleção</label>
+          <input type="text" id="coll-name" placeholder="ex.: Cinema que assombra sem fantasma">
         </div>
-        <p>Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem. A memória aqui é técnica, não sentimento.</p>
-      </div>
-      <div class="films">
-        <div class="film">
-          <div class="poster p5">
-            <span class="year">1982 · EUA</span>
-            <span class="title">Blade Runner</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Ridley Scott</div>
-            <div class="note">Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi.</div>
-          </div>
+        <div class="field">
+          <label>Descrição da coleção</label>
+          <textarea id="coll-desc" placeholder="por que esses filmes estão juntos..."></textarea>
         </div>
-        <div class="film">
-          <div class="poster p6">
-            <span class="year">2004 · EUA</span>
-            <span class="title">Brilho Eterno de uma Mente sem Lembranças</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Michel Gondry</div>
-            <div class="note">Apagar uma pessoa da memória, cena por cena, ao vivo — o esquecimento como processo, não como evento.</div>
-          </div>
+ 
+        <div class="field search-wrap">
+          <label>Buscar filme para adicionar</label>
+          <input type="text" id="coll-search" placeholder="digite o nome do filme...">
+          <div class="search-results" id="coll-results"></div>
+          <div class="film-preview" id="coll-preview"></div>
         </div>
-        <div class="film">
-          <div class="poster p7">
-            <span class="year">1962 · França</span>
-            <span class="title">La Jetée</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Chris Marker</div>
-            <div class="note">Um filme quase inteiro em fotografias congeladas — a memória como sequência de still frames, não de movimento.</div>
-          </div>
+        <div class="field">
+          <label>Nota sobre este filme</label>
+          <textarea id="coll-film-note" placeholder="por que ele está nessa coleção..."></textarea>
         </div>
-        <div class="film">
-          <div class="poster p8">
-            <span class="year">1959 · França/Japão</span>
-            <span class="title">Hiroshima Meu Amor</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Alain Resnais</div>
-            <div class="note">Duas cidades, duas dores, sobrepostas na montagem até não se saber qual lembrança pertence a quem.</div>
+        <button class="btn-ghost btn" id="coll-add-film" type="button">+ Adicionar filme à lista</button>
+ 
+        <div class="pending-list" id="coll-pending"></div>
+ 
+        <div style="margin-top:20px;">
+          <button class="btn" id="coll-generate" type="button">Gerar código da coleção</button>
+        </div>
+ 
+        <div class="code-output" id="coll-code">
+          <pre></pre>
+          <div class="copy-row">
+            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
+            <span class="hint">Cole dentro de <code>collections: [</code>, logo após "NOVAS COLEÇÕES AQUI".</span>
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="collection">
-    <div class="wrap">
-      <div class="col-head">
-        <div>
-          <div class="col-num">Coleção 03</div>
-          <h2>Realismo<br>às margens</h2>
-        </div>
-        <p>Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la com precisão.</p>
-      </div>
-      <div class="films">
-        <div class="film">
-          <div class="poster p9">
-            <span class="year">1968 · Cuba</span>
-            <span class="title">Memórias do Subdesenvolvimento</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Tomás Gutiérrez Alea</div>
-            <div class="note">Um homem observa a revolução pela janela do próprio apartamento — testemunha e estranho ao mesmo tempo.</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p10">
-            <span class="year">1985 · Brasil</span>
-            <span class="title">A Hora da Estrela</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Suzana Amaral</div>
-            <div class="note">Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo.</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p11">
-            <span class="year">1971 · Brasil</span>
-            <span class="title">Como Era Gostoso o Meu Francês</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Nelson Pereira dos Santos</div>
-            <div class="note">Antropofagia como método de narrar a colonização — devora-se o colonizador antes que ele conte a própria versão.</div>
-          </div>
-        </div>
-        <div class="film">
-          <div class="poster p12">
-            <span class="year">1970 · México</span>
-            <span class="title">A Montanha Sagrada</span>
-          </div>
-          <div class="film-meta">
-            <div class="dir">Alejandro Jodorowsky</div>
-            <div class="note">Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
+    </details>
+  </div>
 </main>
-
+ 
 <section class="references" id="referencias">
   <div class="wrap">
     <div class="col-head">
       <div>
         <div class="col-num">Bastidores</div>
-        <h2>Referências em vídeo</h2>
+        <h2>Arquivo de vídeos</h2>
       </div>
-      <p>Os vídeos que alimentam a curadoria — canais que garimpam filme desconhecido, análises que reabrem um clássico. Ficam aqui como material de apoio para quando eu for escrever cada nota.</p>
+      <p>Vídeos que inspiraram uma coleção ou um filme específico — filtre pra ver só o que se relaciona ao que você está lendo.</p>
     </div>
-    <div class="ref-grid">
-
-      <div class="ref-card">
-        <div class="ref-video">
-          <iframe src="https://www.youtube-nocookie.com/embed/ty22ikRAymA" title="8 filmes que você não viu mas precisa urgentemente — Refúgio Cult" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="ref-tag">Inspiração geral da curadoria</div>
-        <h4>8 filmes que você não viu mas precisa urgentemente</h4>
-        <div class="ref-channel">Refúgio Cult</div>
-        <p class="ref-note">O canal que deu o tom do Sessão: garimpo de cinema esquecido, sem ranking e sem nota — só o argumento de por que aquilo merece ser visto.</p>
-      </div>
-
-      <div class="ref-card">
-        <div class="ref-video">
-          <iframe src="https://www.youtube-nocookie.com/embed/oILU27lMdK4" title="Rashomon: a ética em um mundo sem verdade" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="ref-tag">Para a Coleção 01 — Narradores</div>
-        <h4>Rashomon: a ética em um mundo sem verdade</h4>
-        <div class="ref-channel">análise sobre Akira Kurosawa</div>
-        <p class="ref-note">Liga o filme ao perspectivismo de Nietzsche — útil para escrever a nota sobre Rashomon sem repetir o óbvio "quatro versões da verdade".</p>
-      </div>
-
-      <div class="ref-card">
-        <div class="ref-video">
-          <iframe src="https://www.youtube-nocookie.com/embed/k8fYIyzeoV8" title="Os detalhes que ninguém percebeu em Blade Runner" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="ref-tag">Para a Coleção 02 — Memória</div>
-        <h4>Os detalhes que ninguém percebeu em Blade Runner</h4>
-        <div class="ref-channel">análise de curiosidades e simbolismo</div>
-        <p class="ref-note">Levanta as pistas visuais da ambiguidade de Deckard — bom lastro para a nota sobre memória implantada como alibi.</p>
-      </div>
-
-      <div class="ref-card">
-        <div class="ref-video">
-          <iframe src="https://www.youtube-nocookie.com/embed/0T1fNsbzSek" title="Entendendo o filme A Hora da Estrela (final explicado)" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-        <div class="ref-tag">Para a Coleção 03 — Margens</div>
-        <h4>Entendendo o filme A Hora da Estrela (final explicado)</h4>
-        <div class="ref-channel">análise da adaptação de Clarice Lispector</div>
-        <p class="ref-note">Discute o destino de Macabéa e a mediação de Rodrigo S.M. — ponto de partida direto para a nota sobre o filme de Suzana Amaral.</p>
-      </div>
-
+ 
+    <div class="video-filter">
+      <label for="video-filter-select">Filtrar por</label>
+      <select id="video-filter-select"></select>
     </div>
+ 
+    <div class="ref-grid" id="videos-container"></div>
+ 
+    <details class="admin-panel">
+      <summary>Adicionar vídeo de referência</summary>
+      <div class="admin-body">
+        <p class="admin-sub">Cole o link do YouTube, busque os dados automaticamente e relacione a uma coleção e/ou a um filme específico.</p>
+ 
+        <div class="field">
+          <label>Link do vídeo no YouTube</label>
+          <div class="field-row">
+            <input type="url" id="video-url" placeholder="https://www.youtube.com/watch?v=...">
+            <button class="btn-ghost btn" id="video-fetch" type="button" style="flex:0 0 auto;">Buscar dados</button>
+          </div>
+          <span class="hint" id="video-fetch-status"></span>
+          <input type="hidden" id="video-id-hidden">
+        </div>
+ 
+        <div class="field-row">
+          <div class="field">
+            <label>Título</label>
+            <input type="text" id="video-title">
+          </div>
+          <div class="field">
+            <label>Canal</label>
+            <input type="text" id="video-channel">
+          </div>
+        </div>
+ 
+        <div class="field-row">
+          <div class="field">
+            <label>Relacionar a coleção</label>
+            <select id="video-collection"></select>
+          </div>
+          <div class="field">
+            <label>Relacionar a filme</label>
+            <select id="video-film"></select>
+          </div>
+        </div>
+ 
+        <div class="field">
+          <label>Por que esse vídeo é referência</label>
+          <textarea id="video-note"></textarea>
+        </div>
+ 
+        <button class="btn" id="video-generate" type="button">Gerar código</button>
+ 
+        <div class="code-output" id="video-code">
+          <pre></pre>
+          <div class="copy-row">
+            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
+            <span class="hint">Cole dentro de <code>videos: [</code>, logo após "NOVOS VÍDEOS AQUI".</span>
+          </div>
+        </div>
+      </div>
+    </details>
   </div>
 </section>
-
+ 
 <section class="manifesto" id="manifesto">
   <div class="wrap">
     <div>
       <h3>Isto é um diário, não uma vitrine.</h3>
-      <p>Comecei este registro para me obrigar a ver mais filmes — e a prestar atenção no que via. Cada coleção nasce de uma pergunta que eu mesmo estava tentando responder assistindo, não de um gênero ou de uma década.</p>
+      <p>Comecei este registro para me obrigar a ver mais filmes — e a prestar atenção no que via. Cada coleção nasce de uma pergunta que eu mesmo estava tentando responder assistindo.</p>
     </div>
     <div>
-      <p>As notas são escritas logo depois de assistir, para não perder o que senti na hora. Deixo aberto porque impressão de cinema rende mais compartilhada do que guardada numa gaveta — mas o critério aqui é sempre pessoal, nunca uma tentativa de agradar todo mundo.</p>
+      <p>As notas são escritas logo depois de assistir. Deixo aberto porque impressão de cinema rende mais compartilhada do que guardada numa gaveta — mas o critério aqui é sempre pessoal.</p>
       <div class="signature">— C.</div>
     </div>
   </div>
 </section>
-
+ 
 <footer>
   <div class="wrap">
     <span>Sessão — diário de cinema</span>
     <span>Atualizado sem pressa, filme por filme</span>
   </div>
 </footer>
-
+ 
+<script>
+/* ======================================================================
+   DADOS DO SITE — toda a edição de conteúdo acontece aqui dentro.
+   Os formulários acima geram blocos de código prontos para colar
+   exatamente nos pontos marcados com "NOVAS ... AQUI".
+   ====================================================================== */
+const SITE_DATA = {
+  diary: [
+    // NOVAS ENTRADAS AQUI ▼
+    { date:'2026-09-02', title:'Terra em Transe', director:'Glauber Rocha', year:'1967', poster:'', tag:'1a', note:'Um filme que grita antes de argumentar — achei cansativo em partes, mas a fotografia do final justifica a sessão inteira.' },
+    { date:'2026-08-30', title:'Stalker', director:'Andrei Tarkovsky', year:'1979', poster:'', tag:'revi', note:'Terceira vez e ainda não decidi se a Zona é metáfora de alguma coisa específica ou se resiste a virar metáfora de propósito.' },
+    { date:'2026-08-26', title:'Bacurau', director:'Kleber Mendonça Filho e Juliano Dornelles', year:'2019', poster:'', tag:'1a', note:'Comecei achando que era um filme sobre um lugar e terminei achando que era sobre quem decide o que um lugar vale.' },
+    { date:'2026-08-21', title:'Fitzcarraldo', director:'Werner Herzog', year:'1982', poster:'', tag:'1a', note:'O barco subindo o morro é uma das imagens mais absurdas que já vi no cinema — e funciona por não explicar por quê.' },
+    { date:'2026-08-15', title:'O Espelho', director:'Andrei Tarkovsky', year:'1975', poster:'', tag:'revi', note:'Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa.' }
+  ],
+  collections: [
+    // NOVAS COLEÇÕES AQUI ▼
+    {
+      id:'narradores', name:'Narradores que mentem para si mesmos',
+      description:'Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.',
+      films:[
+        { title:'Rashomon', director:'Akira Kurosawa', year:'1950', poster:'', note:'Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome.' },
+        { title:'Clube da Luta', director:'David Fincher', year:'1999', poster:'', note:'O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir.' },
+        { title:'Psicopata Americano', director:'Mary Harron', year:'2000', poster:'', note:'A confissão mais explícita da tela é, também, a mais duvidosa.' },
+        { title:'Crepúsculo dos Deuses', director:'Billy Wilder', year:'1950', poster:'', note:'Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico.' }
+      ]
+    },
+    {
+      id:'memoria', name:'Cinema como arquivo da memória',
+      description:'Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.',
+      films:[
+        { title:'Blade Runner', director:'Ridley Scott', year:'1982', poster:'', note:'Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi.' },
+        { title:'Brilho Eterno de uma Mente sem Lembranças', director:'Michel Gondry', year:'2004', poster:'', note:'Apagar uma pessoa da memória, cena por cena, ao vivo.' },
+        { title:'La Jetée', director:'Chris Marker', year:'1962', poster:'', note:'Um filme quase inteiro em fotografias congeladas.' },
+        { title:'Hiroshima Meu Amor', director:'Alain Resnais', year:'1959', poster:'', note:'Duas cidades, duas dores, sobrepostas na montagem.' }
+      ]
+    },
+    {
+      id:'margens', name:'Realismo às margens',
+      description:'Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la.',
+      films:[
+        { title:'Memórias do Subdesenvolvimento', director:'Tomás Gutiérrez Alea', year:'1968', poster:'', note:'Um homem observa a revolução pela janela do próprio apartamento.' },
+        { title:'A Hora da Estrela', director:'Suzana Amaral', year:'1985', poster:'', note:'Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo.' },
+        { title:'Como Era Gostoso o Meu Francês', director:'Nelson Pereira dos Santos', year:'1971', poster:'', note:'Antropofagia como método de narrar a colonização.' },
+        { title:'A Montanha Sagrada', director:'Alejandro Jodorowsky', year:'1970', poster:'', note:'Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos.' }
+      ]
+    }
+  ],
+  videos: [
+    // NOVOS VÍDEOS AQUI ▼
+    { youtubeId:'ty22ikRAymA', title:'8 filmes que você não viu mas precisa urgentemente', channel:'Refúgio Cult', note:'O canal que deu o tom deste diário: garimpo de cinema esquecido, sem ranking e sem nota.', relatedCollection:null, relatedFilm:null },
+    { youtubeId:'oILU27lMdK4', title:'Rashomon: a ética em um mundo sem verdade', channel:'análise sobre Akira Kurosawa', note:'Liga o filme ao perspectivismo — bom apoio pra escrever sobre Rashomon sem repetir o óbvio.', relatedCollection:'narradores', relatedFilm:'Rashomon' },
+    { youtubeId:'k8fYIyzeoV8', title:'Os detalhes que ninguém percebeu em Blade Runner', channel:'análise de curiosidades e simbolismo', note:'Levanta as pistas visuais da ambiguidade de Deckard.', relatedCollection:'memoria', relatedFilm:'Blade Runner' },
+    { youtubeId:'0T1fNsbzSek', title:'Entendendo o filme A Hora da Estrela (final explicado)', channel:'análise da adaptação de Clarice Lispector', note:'Discute o destino de Macabéa — ponto de partida direto pra nota sobre o filme.', relatedCollection:'margens', relatedFilm:'A Hora da Estrela' }
+  ]
+};
+ 
+/* ---------- helpers ---------- */
+const TAG_META = {
+  '1a': { label:'1ª vez', cls:'tag-first' },
+  'revi': { label:'revi', cls:'' },
+  'abandonei': { label:'abandonei', cls:'tag-drop' },
+  'rever': { label:'quero rever', cls:'tag-want' }
+};
+const MONTHS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function formatDate(iso){
+  if(!iso) return '';
+  const [y,m,d] = iso.split('-');
+  return `${d} ${MONTHS[Number(m)-1]}`;
+}
+function paletteClass(title){
+  let h = 0;
+  for(let i=0;i<(title||'').length;i++){ h = (h*31 + title.charCodeAt(i)) % 12; }
+  return 'p'+(h+1);
+}
+function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
+function esc(s){ return (s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+ 
+/* ---------- TMDB key ---------- */
+const TMDB_KEY_STORAGE = 'sessao_tmdb_key';
+function getTmdbKey(){ return localStorage.getItem(TMDB_KEY_STORAGE) || ''; }
+function saveTmdbKey(k){ localStorage.setItem(TMDB_KEY_STORAGE, k); updateKeyStatus(); }
+function updateKeyStatus(){
+  const el = document.getElementById('tmdb-key-status');
+  const key = getTmdbKey();
+  if(key){ el.textContent = 'chave configurada ✓'; el.classList.add('ok'); }
+  else { el.textContent = 'nenhuma chave salva'; el.classList.remove('ok'); }
+}
+ 
+/* ---------- render: diary ---------- */
+function diaryPosterHTML(e){
+  if(e.poster){ return `<div class="entry-poster"><img src="${e.poster}" alt=""></div>`; }
+  return `<div class="entry-poster ${paletteClass(e.title)}"></div>`;
+}
+function diaryEntryHTML(e){
+  const tag = TAG_META[e.tag] || TAG_META['1a'];
+  return `
+  <div class="entry">
+    ${diaryPosterHTML(e)}
+    <div class="entry-date">${formatDate(e.date)}</div>
+    <div class="entry-body">
+      <h4>${esc(e.title)} <span class="entry-meta">${e.director?esc(e.director)+', ':''}${esc(e.year)}</span></h4>
+      ${e.note?`<p>${esc(e.note)}</p>`:''}
+    </div>
+    <div class="entry-tag ${tag.cls}">${tag.label}</div>
+  </div>`;
+}
+function renderDiary(){
+  const sorted = [...SITE_DATA.diary].sort((a,b)=> (a.date < b.date ? 1 : -1));
+  document.getElementById('diary-list').innerHTML = sorted.map(diaryEntryHTML).join('');
+}
+ 
+/* ---------- render: collections ---------- */
+function filmPosterHTML(f){
+  if(f.poster){
+    return `<div class="poster has-image">
+      <img src="${f.poster}" alt="">
+      <div class="poster-scrim"></div>
+      <div class="poster-overlay">
+        <span class="year">${esc(f.year)}</span>
+        <span class="title">${esc(f.title)}</span>
+      </div>
+    </div>`;
+  }
+  return `<div class="poster ${paletteClass(f.title)}">
+    <span class="year">${esc(f.year)}</span>
+    <span class="title">${esc(f.title)}</span>
+  </div>`;
+}
+function renderCollections(){
+  const container = document.getElementById('collections-container');
+  container.innerHTML = SITE_DATA.collections.map((c,ci)=>`
+    <section class="collection">
+      <div class="wrap">
+        <div class="col-head">
+          <div>
+            <div class="col-num">Coleção ${String(ci+1).padStart(2,'0')}</div>
+            <h2>${esc(c.name)}</h2>
+          </div>
+          <p>${esc(c.description)}</p>
+        </div>
+        <div class="films">
+          ${c.films.map(f=>`
+            <div class="film">
+              ${filmPosterHTML(f)}
+              <div class="film-meta">
+                <div class="dir">${esc(f.director)}</div>
+                ${f.note?`<div class="note">${esc(f.note)}</div>`:''}
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>`).join('');
+  document.getElementById('stat-collections').textContent = SITE_DATA.collections.length;
+}
+ 
+/* ---------- render: videos ---------- */
+function collectionLabel(relId){
+  if(!relId) return null;
+  const c = SITE_DATA.collections.find(x=>x.id===relId);
+  return c ? c.name : relId;
+}
+function videoCardHTML(v){
+  const collLabel = collectionLabel(v.relatedCollection);
+  return `
+  <div class="ref-card">
+    <div class="ref-video">
+      <iframe src="https://www.youtube-nocookie.com/embed/${v.youtubeId}" title="${escapeAttr(v.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div>
+      ${collLabel?`<span class="video-badge">${esc(collLabel)}</span>`:''}
+      ${v.relatedFilm?`<span class="video-badge film">${esc(v.relatedFilm)}</span>`:''}
+    </div>
+    <h4>${esc(v.title)}</h4>
+    <div class="ref-channel">${esc(v.channel)}</div>
+    ${v.note?`<p class="ref-note">${esc(v.note)}</p>`:''}
+  </div>`;
+}
+function renderVideos(){
+  const filter = document.getElementById('video-filter-select').value;
+  const list = SITE_DATA.videos.filter(v=>{
+    if(filter==='all') return true;
+    if(filter==='none') return !v.relatedCollection;
+    return v.relatedCollection === filter;
+  });
+  document.getElementById('videos-container').innerHTML = list.map(videoCardHTML).join('');
+}
+function populateVideoFilter(){
+  const sel = document.getElementById('video-filter-select');
+  sel.innerHTML = '<option value="all">Todos os vídeos</option>' +
+    SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('') +
+    '<option value="none">Sem coleção (geral)</option>';
+  sel.addEventListener('change', renderVideos);
+}
+function populateVideoRelateSelects(){
+  const collSel = document.getElementById('video-collection');
+  collSel.innerHTML = '<option value="">Nenhuma / geral</option>' +
+    SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  const filmSel = document.getElementById('video-film');
+  const titles = new Set();
+  SITE_DATA.collections.forEach(c=>c.films.forEach(f=>titles.add(f.title)));
+  SITE_DATA.diary.forEach(d=>titles.add(d.title));
+  filmSel.innerHTML = '<option value="">Nenhum filme específico</option>' +
+    [...titles].sort().map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+}
+ 
+/* ---------- generic TMDB search widget ---------- */
+function setupFilmSearch({inputId, resultsId, onSelect}){
+  const input = document.getElementById(inputId);
+  const results = document.getElementById(resultsId);
+  let timer;
+  input.addEventListener('input', ()=>{
+    clearTimeout(timer);
+    const q = input.value.trim();
+    if(q.length < 2){ results.style.display='none'; return; }
+    timer = setTimeout(()=>searchTmdb(q, results, onSelect), 400);
+  });
+  document.addEventListener('click', (ev)=>{
+    if(!results.contains(ev.target) && ev.target !== input){ results.style.display='none'; }
+  });
+}
+async function searchTmdb(query, resultsEl, onSelect){
+  const key = getTmdbKey();
+  if(!key){
+    resultsEl.innerHTML = '<div class="search-result-item">Configure sua chave TMDB no primeiro campo acima.</div>';
+    resultsEl.style.display='block';
+    return;
+  }
+  try{
+    const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${key}&language=pt-BR&query=${encodeURIComponent(query)}`);
+    const data = await res.json();
+    const items = (data.results||[]).slice(0,6);
+    if(items.length===0){ resultsEl.innerHTML = '<div class="search-result-item">Nenhum resultado.</div>'; resultsEl.style.display='block'; return; }
+    resultsEl.innerHTML = items.map(m=>`
+      <div class="search-result-item" data-id="${m.id}">
+        <img src="${m.poster_path ? 'https://image.tmdb.org/t/p/w92'+m.poster_path : ''}" onerror="this.style.visibility='hidden'">
+        <div>${esc(m.title)} <span class="sri-year">${(m.release_date||'').slice(0,4)}</span></div>
+      </div>`).join('');
+    resultsEl.style.display='block';
+    resultsEl.querySelectorAll('.search-result-item[data-id]').forEach(el=>{
+      el.addEventListener('click', async ()=>{
+        const id = el.getAttribute('data-id');
+        const movie = items.find(m=>String(m.id)===id);
+        resultsEl.style.display='none';
+        let director = '';
+        try{
+          const credRes = await fetch(`https://api.themoviedb.org/3/movie/${id}/credits?api_key=${key}`);
+          const cred = await credRes.json();
+          const dir = (cred.crew||[]).find(c=>c.job==='Director');
+          if(dir) director = dir.name;
+        }catch(e){}
+        onSelect({
+          title: movie.title,
+          year: (movie.release_date||'').slice(0,4),
+          director,
+          poster: movie.poster_path ? 'https://image.tmdb.org/t/p/w342'+movie.poster_path : ''
+        });
+      });
+    });
+  }catch(e){
+    resultsEl.innerHTML = '<div class="search-result-item">Erro ao buscar. Confira a chave.</div>';
+    resultsEl.style.display='block';
+  }
+}
+function renderFilmPreview(containerId, film){
+  const el = document.getElementById(containerId);
+  el.innerHTML = `
+    ${film.poster ? `<img src="${film.poster}">` : ''}
+    <div class="fp-info">
+      <h5>${esc(film.title)}</h5>
+      <div class="fp-meta">${film.director ? esc(film.director) : 'diretor não encontrado'} · ${esc(film.year)||'?'}</div>
+    </div>`;
+  el.style.display = 'flex';
+}
+function showCode(containerId, codeStr){
+  const el = document.getElementById(containerId);
+  el.querySelector('pre').textContent = codeStr;
+  el.style.display = 'block';
+}
+ 
+/* ---------- diary form ---------- */
+let diarySelectedFilm = null;
+let diaryTag = '1a';
+function initDiaryForm(){
+  document.getElementById('diary-date').value = new Date().toISOString().slice(0,10);
+  setupFilmSearch({ inputId:'diary-search', resultsId:'diary-results', onSelect:(film)=>{
+    diarySelectedFilm = film;
+    renderFilmPreview('diary-preview', film);
+  }});
+  document.querySelectorAll('#diary-tag-picker button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('#diary-tag-picker button').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      diaryTag = btn.dataset.tag;
+    });
+  });
+  document.getElementById('diary-generate').addEventListener('click', ()=>{
+    if(!diarySelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
+    const date = document.getElementById('diary-date').value || new Date().toISOString().slice(0,10);
+    const note = document.getElementById('diary-note').value.trim();
+    const code = `    { date:'${date}', title:${JSON.stringify(diarySelectedFilm.title)}, director:${JSON.stringify(diarySelectedFilm.director||'')}, year:'${diarySelectedFilm.year||''}', poster:${JSON.stringify(diarySelectedFilm.poster||'')}, tag:'${diaryTag}', note:${JSON.stringify(note)} },`;
+    showCode('diary-code', code);
+  });
+}
+ 
+/* ---------- collection form ---------- */
+let collSelectedFilm = null;
+let pendingCollectionFilms = [];
+function renderPendingCollectionFilms(){
+  const el = document.getElementById('coll-pending');
+  el.innerHTML = pendingCollectionFilms.map((f,i)=>`
+    <div class="pending-item">
+      <span>${esc(f.title)} ${f.year?'('+esc(f.year)+')':''}</span>
+      <button type="button" data-i="${i}">remover</button>
+    </div>`).join('');
+  el.querySelectorAll('button[data-i]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      pendingCollectionFilms.splice(Number(btn.dataset.i),1);
+      renderPendingCollectionFilms();
+    });
+  });
+}
+function initCollectionForm(){
+  setupFilmSearch({ inputId:'coll-search', resultsId:'coll-results', onSelect:(film)=>{
+    collSelectedFilm = film;
+    renderFilmPreview('coll-preview', film);
+  }});
+  document.getElementById('coll-add-film').addEventListener('click', ()=>{
+    if(!collSelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
+    const note = document.getElementById('coll-film-note').value.trim();
+    pendingCollectionFilms.push({ ...collSelectedFilm, note });
+    document.getElementById('coll-film-note').value = '';
+    document.getElementById('coll-search').value = '';
+    document.getElementById('coll-preview').style.display = 'none';
+    collSelectedFilm = null;
+    renderPendingCollectionFilms();
+  });
+  document.getElementById('coll-generate').addEventListener('click', ()=>{
+    const name = document.getElementById('coll-name').value.trim();
+    const desc = document.getElementById('coll-desc').value.trim();
+    if(!name || pendingCollectionFilms.length===0){ alert('Dê um nome à coleção e adicione ao menos um filme.'); return; }
+    const id = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+    const filmsCode = pendingCollectionFilms.map(f=>
+      `        { title:${JSON.stringify(f.title)}, director:${JSON.stringify(f.director||'')}, year:'${f.year||''}', poster:${JSON.stringify(f.poster||'')}, note:${JSON.stringify(f.note||'')} }`
+    ).join(',\n');
+    const code = `    {\n      id:'${id}', name:${JSON.stringify(name)},\n      description:${JSON.stringify(desc)},\n      films:[\n${filmsCode}\n      ]\n    },`;
+    showCode('coll-code', code);
+  });
+}
+ 
+/* ---------- video form ---------- */
+function extractYouTubeId(url){
+  const m = (url||'').match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
+  if(m) return m[1];
+  if((url||'').trim().length === 11) return url.trim();
+  return null;
+}
+function initVideoForm(){
+  document.getElementById('video-fetch').addEventListener('click', async ()=>{
+    const url = document.getElementById('video-url').value.trim();
+    const id = extractYouTubeId(url);
+    const status = document.getElementById('video-fetch-status');
+    if(!id){ status.textContent = 'Não reconheci esse link — confira e tente de novo.'; return; }
+    document.getElementById('video-id-hidden').value = id;
+    try{
+      const res = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${id}&format=json`);
+      const data = await res.json();
+      document.getElementById('video-title').value = data.title || '';
+      document.getElementById('video-channel').value = data.author_name || '';
+      status.textContent = 'Dados encontrados ✓';
+    }catch(e){
+      status.textContent = 'Não consegui buscar automaticamente — preencha título e canal à mão.';
+    }
+  });
+  document.getElementById('video-generate').addEventListener('click', ()=>{
+    const id = document.getElementById('video-id-hidden').value;
+    if(!id){ alert('Busque os dados do vídeo primeiro.'); return; }
+    const title = document.getElementById('video-title').value.trim();
+    const channel = document.getElementById('video-channel').value.trim();
+    const note = document.getElementById('video-note').value.trim();
+    const relColl = document.getElementById('video-collection').value;
+    const relFilm = document.getElementById('video-film').value;
+    const code = `    { youtubeId:'${id}', title:${JSON.stringify(title)}, channel:${JSON.stringify(channel)}, note:${JSON.stringify(note)}, relatedCollection:${relColl?`'${relColl}'`:'null'}, relatedFilm:${relFilm?JSON.stringify(relFilm):'null'} },`;
+    showCode('video-code', code);
+  });
+}
+ 
+/* ---------- copy buttons (event delegation) ---------- */
+document.addEventListener('click', (ev)=>{
+  if(ev.target.classList.contains('copy-btn')){
+    const pre = ev.target.closest('.code-output').querySelector('pre');
+    navigator.clipboard.writeText(pre.textContent).then(()=>{
+      const original = ev.target.textContent;
+      ev.target.textContent = 'Copiado!';
+      setTimeout(()=>{ ev.target.textContent = original; }, 1500);
+    });
+  }
+});
+ 
+/* ---------- boot ---------- */
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderDiary();
+  renderCollections();
+  populateVideoFilter();
+  populateVideoRelateSelects();
+  renderVideos();
+ 
+  document.getElementById('tmdb-key-input').value = getTmdbKey();
+  updateKeyStatus();
+  document.getElementById('tmdb-key-save').addEventListener('click', ()=>{
+    saveTmdbKey(document.getElementById('tmdb-key-input').value.trim());
+  });
+ 
+  initDiaryForm();
+  initCollectionForm();
+  initVideoForm();
+});
+</script>
+ 
 </body>
 </html>
+ 
