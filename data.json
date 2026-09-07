@@ -75,7 +75,15 @@
       "id": "cinema-dificil",
       "name": "Cinema difícil",
       "description": "Filmes difíceis de assistir",
-      "films": []
+      "films": [
+        {
+          "title": "Melancolia",
+          "director": "Lars von Trier",
+          "year": "2011",
+          "poster": "https://image.tmdb.org/t/p/w342/fi0XkF2GWlSYT4i7AlRTJJzKUY9.jpg",
+          "note": "porque é difícil de ver e muito entediante."
+        }
+      ]
     }
   ],
   "videos": [
