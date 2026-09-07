@@ -7,13 +7,6 @@
       "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
       "films": [
         {
-          "title": "Psicopata Americano",
-          "director": "Mary Harron",
-          "year": "2000",
-          "poster": "",
-          "note": "A confissão mais explícita da tela é, também, a mais duvidosa."
-        },
-        {
           "title": "Crepúsculo dos Deuses",
           "director": "Billy Wilder",
           "year": "1950",
