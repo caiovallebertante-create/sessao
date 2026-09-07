@@ -243,6 +243,13 @@
           "year": "1927",
           "poster": "https://image.tmdb.org/t/p/w342/xBx21HvGJCb15PKWkyb7uc435Wx.jpg",
           "note": "Cinema mudo, expressionista; a robô Maria como origem do arquétipo."
+        },
+        {
+          "title": "2001: Uma Odisséia no Espaço",
+          "director": "Stanley Kubrick",
+          "year": "1968",
+          "poster": "https://image.tmdb.org/t/p/w342/pVCmLuATJ0lQs4Vx1zUJUN0if2A.jpg",
+          "note": "A HAL 9000 e a ansiedade da Guerra Fria com a automação."
         }
       ]
     }
