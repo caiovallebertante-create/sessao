@@ -7,13 +7,6 @@
       "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
       "films": [
         {
-          "title": "Hiroshima Meu Amor",
-          "director": "Alain Resnais",
-          "year": "1959",
-          "poster": "",
-          "note": "Duas cidades, duas dores, sobrepostas na montagem."
-        },
-        {
           "title": "Blade Runner: O Caçador de Andróides",
           "director": "Ridley Scott",
           "year": "1982",
