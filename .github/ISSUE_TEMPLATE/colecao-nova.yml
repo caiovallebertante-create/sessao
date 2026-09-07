@@ -1,0 +1,15 @@
+name: "📚 Nova coleção"
+description: Criar uma coleção nova (vazia — adicione filmes com o formulário "Adicionar filme a uma coleção")
+title: "[colecao-nova] nova coleção"
+labels: ["colecao-nova"]
+body:
+  - type: input
+    id: nome
+    attributes:
+      label: Nome da coleção
+    validations:
+      required: true
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição da coleção
