@@ -42,13 +42,6 @@
       "description": "Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la.",
       "films": [
         {
-          "title": "A Hora da Estrela",
-          "director": "Suzana Amaral",
-          "year": "1985",
-          "poster": "",
-          "note": "Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo."
-        },
-        {
           "title": "Como Era Gostoso o Meu Francês",
           "director": "Nelson Pereira dos Santos",
           "year": "1971",
