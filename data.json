@@ -1,15 +1,5 @@
 {
-  "diary": [
-    {
-      "date": "2026-08-15",
-      "title": "O Espelho",
-      "director": "Andrei Tarkovsky",
-      "year": "1975",
-      "poster": "",
-      "tag": "revi",
-      "note": "Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa."
-    }
-  ],
+  "diary": [],
   "collections": [
     {
       "id": "narradores",
