@@ -233,11 +233,9 @@
 
     <div class="entries" id="diary-list"></div>
 
-    <details class="admin-panel">
-      <summary>Adicionar filme ao diário</summary>
+    <details class="admin-panel" open id="settings-panel">
+      <summary>Configurações (uma vez só)</summary>
       <div class="admin-body">
-        <p class="admin-sub">Painel de uso pessoal — busca o filme numa base de dados real, você preenche a nota e ele gera o código pra colar no arquivo.</p>
-
         <div class="field key-field">
           <label>Chave da API TMDB (grátis, salva só neste navegador)</label>
           <div class="key-row">
@@ -245,8 +243,24 @@
             <button class="btn-ghost btn" id="tmdb-key-save" type="button">Salvar</button>
             <span class="key-status" id="tmdb-key-status">verificando…</span>
           </div>
-          <p class="hint">Pegue grátis em themoviedb.org → crie uma conta → Settings → API → solicite uma chave "Developer". Sem isso a busca automática não funciona.</p>
+          <p class="hint">Pegue grátis em themoviedb.org → crie uma conta → Settings → API → solicite uma chave "Developer". Sem isso a busca automática de filmes não funciona.</p>
         </div>
+        <div class="field key-field">
+          <label>Repositório do GitHub (usuário/repo)</label>
+          <div class="key-row">
+            <input type="text" id="gh-repo-input" placeholder="seu-usuario/sessao">
+            <button class="btn-ghost btn" id="gh-repo-save" type="button">Salvar</button>
+            <span class="key-status" id="gh-repo-status"></span>
+          </div>
+          <p class="hint">É pra onde os botões "Adicionar" abaixo vão te mandar, com o formulário certo já aberto.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="admin-panel">
+      <summary>Adicionar filme ao diário</summary>
+      <div class="admin-body">
+        <p class="admin-sub">Busca o filme numa base de dados real e abre um formulário do GitHub já preenchido — você só confirma o envio, sem editar código.</p>
 
         <div class="field search-wrap">
           <label>Buscar filme</label>
@@ -276,15 +290,8 @@
           <textarea id="diary-note" placeholder="o que ficou depois de ver..."></textarea>
         </div>
 
-        <button class="btn" id="diary-generate" type="button">Gerar código</button>
-
-        <div class="code-output" id="diary-code">
-          <pre></pre>
-          <div class="copy-row">
-            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
-            <span class="hint">Cole dentro de <code>diary: [</code>, logo após o comentário "NOVAS ENTRADAS AQUI".</span>
-          </div>
-        </div>
+        <button class="btn" id="diary-generate" type="button">Abrir formulário no GitHub</button>
+        <p class="hint">Abre uma aba nova já preenchida. É só clicar em "Submit new issue" — o site atualiza sozinho em cerca de 1 minuto.</p>
       </div>
     </details>
   </div>
@@ -311,8 +318,7 @@
     <details class="admin-panel">
       <summary>Criar nova coleção</summary>
       <div class="admin-body">
-        <p class="admin-sub">Dê um nome e uma descrição, adicione os filmes um a um (com nota individual) e gere o código da coleção inteira.</p>
-
+        <p class="admin-sub">Cria a coleção vazia — depois use o painel abaixo pra ir adicionando filmes a ela, um de cada vez.</p>
         <div class="field">
           <label>Nome da coleção</label>
           <input type="text" id="coll-name" placeholder="ex.: Cinema que assombra sem fantasma">
@@ -321,32 +327,31 @@
           <label>Descrição da coleção</label>
           <textarea id="coll-desc" placeholder="por que esses filmes estão juntos..."></textarea>
         </div>
+        <button class="btn" id="coll-generate" type="button">Abrir formulário no GitHub</button>
+        <p class="hint">Depois de enviado, o robô cria a coleção e responde na própria issue com o id gerado — ele já aparece nos menus abaixo em cerca de 1 minuto.</p>
+      </div>
+    </details>
 
+    <details class="admin-panel">
+      <summary>Adicionar filme a uma coleção</summary>
+      <div class="admin-body">
+        <p class="admin-sub">Busca o filme numa base de dados real e abre o formulário do GitHub já preenchido.</p>
+        <div class="field">
+          <label>Coleção</label>
+          <select id="collfilm-collection"></select>
+        </div>
         <div class="field search-wrap">
-          <label>Buscar filme para adicionar</label>
-          <input type="text" id="coll-search" placeholder="digite o nome do filme...">
-          <div class="search-results" id="coll-results"></div>
-          <div class="film-preview" id="coll-preview"></div>
+          <label>Buscar filme</label>
+          <input type="text" id="collfilm-search" placeholder="digite o nome do filme...">
+          <div class="search-results" id="collfilm-results"></div>
+          <div class="film-preview" id="collfilm-preview"></div>
         </div>
         <div class="field">
           <label>Nota sobre este filme</label>
-          <textarea id="coll-film-note" placeholder="por que ele está nessa coleção..."></textarea>
+          <textarea id="collfilm-note" placeholder="por que ele está nessa coleção..."></textarea>
         </div>
-        <button class="btn-ghost btn" id="coll-add-film" type="button">+ Adicionar filme à lista</button>
-
-        <div class="pending-list" id="coll-pending"></div>
-
-        <div style="margin-top:20px;">
-          <button class="btn" id="coll-generate" type="button">Gerar código da coleção</button>
-        </div>
-
-        <div class="code-output" id="coll-code">
-          <pre></pre>
-          <div class="copy-row">
-            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
-            <span class="hint">Cole dentro de <code>collections: [</code>, logo após "NOVAS COLEÇÕES AQUI".</span>
-          </div>
-        </div>
+        <button class="btn" id="collfilm-generate" type="button">Abrir formulário no GitHub</button>
+        <p class="hint">É só confirmar o envio na aba que abrir — o filme entra na coleção sozinho.</p>
       </div>
     </details>
   </div>
@@ -411,15 +416,8 @@
           <textarea id="video-note"></textarea>
         </div>
 
-        <button class="btn" id="video-generate" type="button">Gerar código</button>
-
-        <div class="code-output" id="video-code">
-          <pre></pre>
-          <div class="copy-row">
-            <button class="btn-ghost btn copy-btn" type="button">Copiar código</button>
-            <span class="hint">Cole dentro de <code>videos: [</code>, logo após "NOVOS VÍDEOS AQUI".</span>
-          </div>
-        </div>
+        <button class="btn" id="video-generate" type="button">Abrir formulário no GitHub</button>
+        <p class="hint">Confirme o envio na aba que abrir — o vídeo entra no arquivo sozinho.</p>
       </div>
     </details>
   </div>
@@ -447,60 +445,19 @@
 
 <script>
 /* ======================================================================
-   DADOS DO SITE — toda a edição de conteúdo acontece aqui dentro.
-   Os formulários acima geram blocos de código prontos para colar
-   exatamente nos pontos marcados com "NOVAS ... AQUI".
+   DADOS DO SITE — vêm de data.json, ao lado deste arquivo no repositório.
+   Toda edição de conteúdo acontece por formulário (issues do GitHub),
+   nunca mexendo neste HTML.
    ====================================================================== */
-const SITE_DATA = {
-  diary: [
-    // NOVAS ENTRADAS AQUI ▼
-    { date:'2026-09-02', title:'Terra em Transe', director:'Glauber Rocha', year:'1967', poster:'', tag:'1a', note:'Um filme que grita antes de argumentar — achei cansativo em partes, mas a fotografia do final justifica a sessão inteira.' },
-    { date:'2026-08-30', title:'Stalker', director:'Andrei Tarkovsky', year:'1979', poster:'', tag:'revi', note:'Terceira vez e ainda não decidi se a Zona é metáfora de alguma coisa específica ou se resiste a virar metáfora de propósito.' },
-    { date:'2026-08-26', title:'Bacurau', director:'Kleber Mendonça Filho e Juliano Dornelles', year:'2019', poster:'', tag:'1a', note:'Comecei achando que era um filme sobre um lugar e terminei achando que era sobre quem decide o que um lugar vale.' },
-    { date:'2026-08-21', title:'Fitzcarraldo', director:'Werner Herzog', year:'1982', poster:'', tag:'1a', note:'O barco subindo o morro é uma das imagens mais absurdas que já vi no cinema — e funciona por não explicar por quê.' },
-    { date:'2026-08-15', title:'O Espelho', director:'Andrei Tarkovsky', year:'1975', poster:'', tag:'revi', note:'Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa.' }
-  ],
-  collections: [
-    // NOVAS COLEÇÕES AQUI ▼
-    {
-      id:'narradores', name:'Narradores que mentem para si mesmos',
-      description:'Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.',
-      films:[
-        { title:'Rashomon', director:'Akira Kurosawa', year:'1950', poster:'', note:'Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome.' },
-        { title:'Clube da Luta', director:'David Fincher', year:'1999', poster:'', note:'O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir.' },
-        { title:'Psicopata Americano', director:'Mary Harron', year:'2000', poster:'', note:'A confissão mais explícita da tela é, também, a mais duvidosa.' },
-        { title:'Crepúsculo dos Deuses', director:'Billy Wilder', year:'1950', poster:'', note:'Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico.' }
-      ]
-    },
-    {
-      id:'memoria', name:'Cinema como arquivo da memória',
-      description:'Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.',
-      films:[
-        { title:'Blade Runner', director:'Ridley Scott', year:'1982', poster:'', note:'Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi.' },
-        { title:'Brilho Eterno de uma Mente sem Lembranças', director:'Michel Gondry', year:'2004', poster:'', note:'Apagar uma pessoa da memória, cena por cena, ao vivo.' },
-        { title:'La Jetée', director:'Chris Marker', year:'1962', poster:'', note:'Um filme quase inteiro em fotografias congeladas.' },
-        { title:'Hiroshima Meu Amor', director:'Alain Resnais', year:'1959', poster:'', note:'Duas cidades, duas dores, sobrepostas na montagem.' }
-      ]
-    },
-    {
-      id:'margens', name:'Realismo às margens',
-      description:'Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la.',
-      films:[
-        { title:'Memórias do Subdesenvolvimento', director:'Tomás Gutiérrez Alea', year:'1968', poster:'', note:'Um homem observa a revolução pela janela do próprio apartamento.' },
-        { title:'A Hora da Estrela', director:'Suzana Amaral', year:'1985', poster:'', note:'Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo.' },
-        { title:'Como Era Gostoso o Meu Francês', director:'Nelson Pereira dos Santos', year:'1971', poster:'', note:'Antropofagia como método de narrar a colonização.' },
-        { title:'A Montanha Sagrada', director:'Alejandro Jodorowsky', year:'1970', poster:'', note:'Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos.' }
-      ]
-    }
-  ],
-  videos: [
-    // NOVOS VÍDEOS AQUI ▼
-    { youtubeId:'ty22ikRAymA', title:'8 filmes que você não viu mas precisa urgentemente', channel:'Refúgio Cult', note:'O canal que deu o tom deste diário: garimpo de cinema esquecido, sem ranking e sem nota.', relatedCollection:null, relatedFilm:null },
-    { youtubeId:'oILU27lMdK4', title:'Rashomon: a ética em um mundo sem verdade', channel:'análise sobre Akira Kurosawa', note:'Liga o filme ao perspectivismo — bom apoio pra escrever sobre Rashomon sem repetir o óbvio.', relatedCollection:'narradores', relatedFilm:'Rashomon' },
-    { youtubeId:'k8fYIyzeoV8', title:'Os detalhes que ninguém percebeu em Blade Runner', channel:'análise de curiosidades e simbolismo', note:'Levanta as pistas visuais da ambiguidade de Deckard.', relatedCollection:'memoria', relatedFilm:'Blade Runner' },
-    { youtubeId:'0T1fNsbzSek', title:'Entendendo o filme A Hora da Estrela (final explicado)', channel:'análise da adaptação de Clarice Lispector', note:'Discute o destino de Macabéa — ponto de partida direto pra nota sobre o filme.', relatedCollection:'margens', relatedFilm:'A Hora da Estrela' }
-  ]
-};
+let SITE_DATA = { diary: [], collections: [], videos: [] };
+async function loadSiteData(){
+  try{
+    const res = await fetch('data.json', { cache:'no-store' });
+    SITE_DATA = await res.json();
+  }catch(e){
+    console.error('Não consegui carregar data.json', e);
+  }
+}
 
 /* ---------- helpers ---------- */
 const TAG_META = {
@@ -532,6 +489,25 @@ function updateKeyStatus(){
   const key = getTmdbKey();
   if(key){ el.textContent = 'chave configurada ✓'; el.classList.add('ok'); }
   else { el.textContent = 'nenhuma chave salva'; el.classList.remove('ok'); }
+}
+
+/* ---------- GitHub repo + issue links ---------- */
+const GH_REPO_STORAGE = 'sessao_gh_repo';
+function getGhRepo(){ return localStorage.getItem(GH_REPO_STORAGE) || ''; }
+function saveGhRepo(r){ localStorage.setItem(GH_REPO_STORAGE, r); updateRepoStatus(); }
+function updateRepoStatus(){
+  const el = document.getElementById('gh-repo-status');
+  const repo = getGhRepo();
+  if(repo){ el.textContent = 'salvo ✓'; el.classList.add('ok'); }
+  else { el.textContent = 'configure para os botões funcionarem'; el.classList.remove('ok'); }
+}
+function openGithubIssue(templateFile, fields){
+  const repo = getGhRepo();
+  if(!repo){ alert('Configure o repositório do GitHub em "Configurações", no topo da seção Diário.'); return; }
+  const params = new URLSearchParams();
+  params.set('template', templateFile);
+  Object.entries(fields).forEach(([k,v])=>{ if(v) params.set(k, v); });
+  window.open(`https://github.com/${repo}/issues/new?${params.toString()}`, '_blank');
 }
 
 /* ---------- render: diary ---------- */
@@ -745,53 +721,49 @@ function initDiaryForm(){
     if(!diarySelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
     const date = document.getElementById('diary-date').value || new Date().toISOString().slice(0,10);
     const note = document.getElementById('diary-note').value.trim();
-    const code = `    { date:'${date}', title:${JSON.stringify(diarySelectedFilm.title)}, director:${JSON.stringify(diarySelectedFilm.director||'')}, year:'${diarySelectedFilm.year||''}', poster:${JSON.stringify(diarySelectedFilm.poster||'')}, tag:'${diaryTag}', note:${JSON.stringify(note)} },`;
-    showCode('diary-code', code);
-  });
-}
-
-/* ---------- collection form ---------- */
-let collSelectedFilm = null;
-let pendingCollectionFilms = [];
-function renderPendingCollectionFilms(){
-  const el = document.getElementById('coll-pending');
-  el.innerHTML = pendingCollectionFilms.map((f,i)=>`
-    <div class="pending-item">
-      <span>${esc(f.title)} ${f.year?'('+esc(f.year)+')':''}</span>
-      <button type="button" data-i="${i}">remover</button>
-    </div>`).join('');
-  el.querySelectorAll('button[data-i]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      pendingCollectionFilms.splice(Number(btn.dataset.i),1);
-      renderPendingCollectionFilms();
+    openGithubIssue('diario.yml', {
+      titulo: diarySelectedFilm.title,
+      diretor: diarySelectedFilm.director || '',
+      ano: diarySelectedFilm.year || '',
+      poster: diarySelectedFilm.poster || '',
+      data: date,
+      tag: diaryTag,
+      nota: note
     });
   });
 }
-function initCollectionForm(){
-  setupFilmSearch({ inputId:'coll-search', resultsId:'coll-results', onSelect:(film)=>{
-    collSelectedFilm = film;
-    renderFilmPreview('coll-preview', film);
-  }});
-  document.getElementById('coll-add-film').addEventListener('click', ()=>{
-    if(!collSelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
-    const note = document.getElementById('coll-film-note').value.trim();
-    pendingCollectionFilms.push({ ...collSelectedFilm, note });
-    document.getElementById('coll-film-note').value = '';
-    document.getElementById('coll-search').value = '';
-    document.getElementById('coll-preview').style.display = 'none';
-    collSelectedFilm = null;
-    renderPendingCollectionFilms();
-  });
+
+/* ---------- collection forms ---------- */
+function populateCollFilmSelect(){
+  const sel = document.getElementById('collfilm-collection');
+  sel.innerHTML = SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+}
+let collfilmSelectedFilm = null;
+function initCollectionForms(){
   document.getElementById('coll-generate').addEventListener('click', ()=>{
     const name = document.getElementById('coll-name').value.trim();
     const desc = document.getElementById('coll-desc').value.trim();
-    if(!name || pendingCollectionFilms.length===0){ alert('Dê um nome à coleção e adicione ao menos um filme.'); return; }
-    const id = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-    const filmsCode = pendingCollectionFilms.map(f=>
-      `        { title:${JSON.stringify(f.title)}, director:${JSON.stringify(f.director||'')}, year:'${f.year||''}', poster:${JSON.stringify(f.poster||'')}, note:${JSON.stringify(f.note||'')} }`
-    ).join(',\n');
-    const code = `    {\n      id:'${id}', name:${JSON.stringify(name)},\n      description:${JSON.stringify(desc)},\n      films:[\n${filmsCode}\n      ]\n    },`;
-    showCode('coll-code', code);
+    if(!name){ alert('Dê um nome à coleção primeiro.'); return; }
+    openGithubIssue('colecao-nova.yml', { nome:name, descricao:desc });
+  });
+
+  setupFilmSearch({ inputId:'collfilm-search', resultsId:'collfilm-results', onSelect:(film)=>{
+    collfilmSelectedFilm = film;
+    renderFilmPreview('collfilm-preview', film);
+  }});
+  document.getElementById('collfilm-generate').addEventListener('click', ()=>{
+    const collId = document.getElementById('collfilm-collection').value;
+    if(!collId){ alert('Crie uma coleção primeiro — ainda não há nenhuma disponível.'); return; }
+    if(!collfilmSelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
+    const note = document.getElementById('collfilm-note').value.trim();
+    openGithubIssue('colecao-filme.yml', {
+      colecao_id: collId,
+      titulo: collfilmSelectedFilm.title,
+      diretor: collfilmSelectedFilm.director || '',
+      ano: collfilmSelectedFilm.year || '',
+      poster: collfilmSelectedFilm.poster || '',
+      nota: note
+    });
   });
 }
 
@@ -822,34 +794,26 @@ function initVideoForm(){
   document.getElementById('video-generate').addEventListener('click', ()=>{
     const id = document.getElementById('video-id-hidden').value;
     if(!id){ alert('Busque os dados do vídeo primeiro.'); return; }
-    const title = document.getElementById('video-title').value.trim();
-    const channel = document.getElementById('video-channel').value.trim();
-    const note = document.getElementById('video-note').value.trim();
-    const relColl = document.getElementById('video-collection').value;
-    const relFilm = document.getElementById('video-film').value;
-    const code = `    { youtubeId:'${id}', title:${JSON.stringify(title)}, channel:${JSON.stringify(channel)}, note:${JSON.stringify(note)}, relatedCollection:${relColl?`'${relColl}'`:'null'}, relatedFilm:${relFilm?JSON.stringify(relFilm):'null'} },`;
-    showCode('video-code', code);
+    openGithubIssue('video.yml', {
+      youtube_id: id,
+      titulo: document.getElementById('video-title').value.trim(),
+      canal: document.getElementById('video-channel').value.trim(),
+      colecao_relacionada: document.getElementById('video-collection').value,
+      filme_relacionado: document.getElementById('video-film').value,
+      nota: document.getElementById('video-note').value.trim()
+    });
   });
 }
 
-/* ---------- copy buttons (event delegation) ---------- */
-document.addEventListener('click', (ev)=>{
-  if(ev.target.classList.contains('copy-btn')){
-    const pre = ev.target.closest('.code-output').querySelector('pre');
-    navigator.clipboard.writeText(pre.textContent).then(()=>{
-      const original = ev.target.textContent;
-      ev.target.textContent = 'Copiado!';
-      setTimeout(()=>{ ev.target.textContent = original; }, 1500);
-    });
-  }
-});
-
 /* ---------- boot ---------- */
-document.addEventListener('DOMContentLoaded', ()=>{
+document.addEventListener('DOMContentLoaded', async ()=>{
+  await loadSiteData();
+
   renderDiary();
   renderCollections();
   populateVideoFilter();
   populateVideoRelateSelects();
+  populateCollFilmSelect();
   renderVideos();
 
   document.getElementById('tmdb-key-input').value = getTmdbKey();
@@ -858,8 +822,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
     saveTmdbKey(document.getElementById('tmdb-key-input').value.trim());
   });
 
+  document.getElementById('gh-repo-input').value = getGhRepo();
+  updateRepoStatus();
+  document.getElementById('gh-repo-save').addEventListener('click', ()=>{
+    saveGhRepo(document.getElementById('gh-repo-input').value.trim());
+  });
+
   initDiaryForm();
-  initCollectionForm();
+  initCollectionForms();
   initVideoForm();
 });
 </script>

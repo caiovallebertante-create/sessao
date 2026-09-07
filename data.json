@@ -1,0 +1,50 @@
+{
+  "diary": [
+    { "date": "2026-09-02", "title": "Terra em Transe", "director": "Glauber Rocha", "year": "1967", "poster": "", "tag": "1a", "note": "Um filme que grita antes de argumentar — achei cansativo em partes, mas a fotografia do final justifica a sessão inteira." },
+    { "date": "2026-08-30", "title": "Stalker", "director": "Andrei Tarkovsky", "year": "1979", "poster": "", "tag": "revi", "note": "Terceira vez e ainda não decidi se a Zona é metáfora de alguma coisa específica ou se resiste a virar metáfora de propósito." },
+    { "date": "2026-08-26", "title": "Bacurau", "director": "Kleber Mendonça Filho e Juliano Dornelles", "year": "2019", "poster": "", "tag": "1a", "note": "Comecei achando que era um filme sobre um lugar e terminei achando que era sobre quem decide o que um lugar vale." },
+    { "date": "2026-08-21", "title": "Fitzcarraldo", "director": "Werner Herzog", "year": "1982", "poster": "", "tag": "1a", "note": "O barco subindo o morro é uma das imagens mais absurdas que já vi no cinema — e funciona por não explicar por quê." },
+    { "date": "2026-08-15", "title": "O Espelho", "director": "Andrei Tarkovsky", "year": "1975", "poster": "", "tag": "revi", "note": "Voltei a ele depois de ler sobre memória involuntária — faz mais sentido como poema do que como narrativa." }
+  ],
+  "collections": [
+    {
+      "id": "narradores",
+      "name": "Narradores que mentem para si mesmos",
+      "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
+      "films": [
+        { "title": "Rashomon", "director": "Akira Kurosawa", "year": "1950", "poster": "", "note": "Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome." },
+        { "title": "Clube da Luta", "director": "David Fincher", "year": "1999", "poster": "", "note": "O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir." },
+        { "title": "Psicopata Americano", "director": "Mary Harron", "year": "2000", "poster": "", "note": "A confissão mais explícita da tela é, também, a mais duvidosa." },
+        { "title": "Crepúsculo dos Deuses", "director": "Billy Wilder", "year": "1950", "poster": "", "note": "Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico." }
+      ]
+    },
+    {
+      "id": "memoria",
+      "name": "Cinema como arquivo da memória",
+      "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
+      "films": [
+        { "title": "Blade Runner", "director": "Ridley Scott", "year": "1982", "poster": "", "note": "Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi." },
+        { "title": "Brilho Eterno de uma Mente sem Lembranças", "director": "Michel Gondry", "year": "2004", "poster": "", "note": "Apagar uma pessoa da memória, cena por cena, ao vivo." },
+        { "title": "La Jetée", "director": "Chris Marker", "year": "1962", "poster": "", "note": "Um filme quase inteiro em fotografias congeladas." },
+        { "title": "Hiroshima Meu Amor", "director": "Alain Resnais", "year": "1959", "poster": "", "note": "Duas cidades, duas dores, sobrepostas na montagem." }
+      ]
+    },
+    {
+      "id": "margens",
+      "name": "Realismo às margens",
+      "description": "Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la.",
+      "films": [
+        { "title": "Memórias do Subdesenvolvimento", "director": "Tomás Gutiérrez Alea", "year": "1968", "poster": "", "note": "Um homem observa a revolução pela janela do próprio apartamento." },
+        { "title": "A Hora da Estrela", "director": "Suzana Amaral", "year": "1985", "poster": "", "note": "Adaptado de Clarice Lispector — a câmera trata a pobreza de Macabéa sem pena e sem espetáculo." },
+        { "title": "Como Era Gostoso o Meu Francês", "director": "Nelson Pereira dos Santos", "year": "1971", "poster": "", "note": "Antropofagia como método de narrar a colonização." },
+        { "title": "A Montanha Sagrada", "director": "Alejandro Jodorowsky", "year": "1970", "poster": "", "note": "Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos." }
+      ]
+    }
+  ],
+  "videos": [
+    { "youtubeId": "ty22ikRAymA", "title": "8 filmes que você não viu mas precisa urgentemente", "channel": "Refúgio Cult", "note": "O canal que deu o tom deste diário: garimpo de cinema esquecido, sem ranking e sem nota.", "relatedCollection": null, "relatedFilm": null },
+    { "youtubeId": "oILU27lMdK4", "title": "Rashomon: a ética em um mundo sem verdade", "channel": "análise sobre Akira Kurosawa", "note": "Liga o filme ao perspectivismo — bom apoio pra escrever sobre Rashomon sem repetir o óbvio.", "relatedCollection": "narradores", "relatedFilm": "Rashomon" },
+    { "youtubeId": "k8fYIyzeoV8", "title": "Os detalhes que ninguém percebeu em Blade Runner", "channel": "análise de curiosidades e simbolismo", "note": "Levanta as pistas visuais da ambiguidade de Deckard.", "relatedCollection": "memoria", "relatedFilm": "Blade Runner" },
+    { "youtubeId": "0T1fNsbzSek", "title": "Entendendo o filme A Hora da Estrela (final explicado)", "channel": "análise da adaptação de Clarice Lispector", "note": "Discute o destino de Macabéa — ponto de partida direto pra nota sobre o filme.", "relatedCollection": "margens", "relatedFilm": "A Hora da Estrela" }
+  ]
+}
