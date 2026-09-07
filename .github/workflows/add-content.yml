@@ -1,0 +1,125 @@
+name: Adicionar conteúdo via formulário
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  process:
+    if: >
+      contains(github.event.issue.labels.*.name, 'diario') ||
+      contains(github.event.issue.labels.*.name, 'colecao-nova') ||
+      contains(github.event.issue.labels.*.name, 'colecao-filme') ||
+      contains(github.event.issue.labels.*.name, 'video')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Atualizar data.json a partir da issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = 'data.json';
+            const data = JSON.parse(fs.readFileSync(path, 'utf8'));
+            const body = context.payload.issue.body || '';
+            const labels = context.payload.issue.labels.map(l => l.name);
+
+            function parseFields(rawBody) {
+              const fields = {};
+              const normalized = '\n' + rawBody.trim();
+              const parts = normalized.split(/\n### /).slice(1);
+              for (const part of parts) {
+                const lines = part.split('\n');
+                const label = lines[0].trim();
+                let value = lines.slice(1).join('\n').trim();
+                if (value === '_No response_') value = '';
+                fields[label] = value;
+              }
+              return fields;
+            }
+            const f = parseFields(body);
+            let comment = 'Não reconheci o tipo desta issue.';
+
+            if (labels.includes('diario')) {
+              data.diary.push({
+                date: f['Data que assisti (AAAA-MM-DD)'] || '',
+                title: f['Título do filme'] || '',
+                director: f['Diretor'] || '',
+                year: f['Ano'] || '',
+                poster: f['URL do pôster (opcional)'] || '',
+                tag: f['Como foi'] || '1a',
+                note: f['Sua nota'] || ''
+              });
+              comment = 'Anotação adicionada ao diário. ✅';
+            }
+
+            if (labels.includes('colecao-nova')) {
+              const name = f['Nome da coleção'] || '';
+              const id = name.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+              data.collections.push({ id, name, description: f['Descrição da coleção'] || '', films: [] });
+              comment = `Coleção criada com id \`${id}\`. Use esse id (ou o menu do site) pra adicionar filmes a ela. ✅`;
+            }
+
+            if (labels.includes('colecao-filme')) {
+              const collId = (f['ID da coleção'] || '').trim();
+              const coll = data.collections.find(c => c.id === collId);
+              if (!coll) {
+                comment = `Não encontrei nenhuma coleção com id \`${collId}\`. Confira o id em data.json e abra a issue de novo.`;
+              } else {
+                coll.films.push({
+                  title: f['Título do filme'] || '',
+                  director: f['Diretor'] || '',
+                  year: f['Ano'] || '',
+                  poster: f['URL do pôster (opcional)'] || '',
+                  note: f['Nota sobre este filme'] || ''
+                });
+                comment = `Filme adicionado à coleção "${coll.name}". ✅`;
+              }
+            }
+
+            if (labels.includes('video')) {
+              data.videos.push({
+                youtubeId: f['ID do vídeo do YouTube'] || '',
+                title: f['Título do vídeo'] || '',
+                channel: f['Canal'] || '',
+                note: f['Por que esse vídeo é referência'] || '',
+                relatedCollection: f['ID da coleção relacionada (opcional)'] || null,
+                relatedFilm: f['Nome do filme relacionado (opcional)'] || null
+              });
+              comment = 'Vídeo adicionado ao arquivo de referências. ✅';
+            }
+
+            fs.writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+      - name: Commitar e publicar
+        run: |
+          git config user.name "sessao-bot"
+          git config user.email "actions@github.com"
+          git add data.json
+          git diff --cached --quiet || git commit -m "Atualiza data.json via issue #${{ github.event.issue.number }}"
+          git push
+
+      - name: Fechar issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed'
+            });
