@@ -33,6 +33,13 @@
           "year": "1959",
           "poster": "",
           "note": "Duas cidades, duas dores, sobrepostas na montagem."
+        },
+        {
+          "title": "Blade Runner: O Caçador de Andróides",
+          "director": "Ridley Scott",
+          "year": "1982",
+          "poster": "https://image.tmdb.org/t/p/w342/y5ibL0vFnzsRiIHosw0WOfHtIj1.jpg",
+          "note": "Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi."
         }
       ]
     },
