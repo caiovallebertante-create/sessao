@@ -70,20 +70,6 @@
           "note": "Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos."
         }
       ]
-    },
-    {
-      "id": "cinema-dificil",
-      "name": "Cinema difícil",
-      "description": "Filmes difíceis de assistir",
-      "films": [
-        {
-          "title": "Melancolia",
-          "director": "Lars von Trier",
-          "year": "2011",
-          "poster": "https://image.tmdb.org/t/p/w342/fi0XkF2GWlSYT4i7AlRTJJzKUY9.jpg",
-          "note": "porque é difícil de ver e muito entediante."
-        }
-      ]
     }
   ],
   "videos": [
