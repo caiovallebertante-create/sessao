@@ -54,6 +54,13 @@
           "year": "1962",
           "poster": "https://image.tmdb.org/t/p/w342/8cV9FFgRSPmvuVMUwP0JhwpSPDL.jpg",
           "note": "Um filme quase inteiro em fotografias congeladas."
+        },
+        {
+          "title": "Hiroshima, Meu Amor",
+          "director": "Alain Resnais",
+          "year": "1959",
+          "poster": "https://image.tmdb.org/t/p/w342/mxxpqHgrbcOMBju6HeyXvLbgJKV.jpg",
+          "note": "Duas cidades, duas dores, sobrepostas na montagem."
         }
       ]
     },
