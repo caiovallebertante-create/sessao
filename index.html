@@ -256,8 +256,8 @@
 
     <div class="entries" id="diary-list"></div>
 
-    <details class="admin-panel" open id="settings-panel">
-      <summary>Configuração (uma vez só)</summary>
+    <details class="admin-panel" id="settings-panel" hidden>
+      <summary>Configuração do modo edição</summary>
       <div class="admin-body">
         <div class="field">
           <label>Repositório do GitHub (usuário/repo)</label>
@@ -511,7 +511,7 @@
 <footer>
   <div class="wrap">
     <span>Sessão — diário de cinema</span>
-    <span>Atualizado sem pressa, filme por filme</span>
+    <span>Atualizado sem pressa, filme por filme · <a href="#editar" id="edit-link" style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">editar</a></span>
   </div>
 </footer>
 
@@ -1248,10 +1248,22 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     toast('Token removido deste navegador.');
   });
 
+  // O painel de configuração fica escondido do público.
+  // Aparece se: já é modo edição, ou a URL termina em #editar, ou clicou em "editar" no rodapé.
+  const settingsPanel = document.getElementById('settings-panel');
+  function revealSettings(openIt){
+    settingsPanel.hidden = false;
+    if(openIt) settingsPanel.open = true;
+    settingsPanel.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+  const EDIT_HASHES = ['#editar','#config','#admin','#configuracao'];
   if(isAdmin()){
-    document.getElementById('settings-panel').removeAttribute('open');
+    settingsPanel.hidden = false;           // visível (recolhido) para poder trocar/limpar o token
     verifyAccess(true);
   }
+  if(EDIT_HASHES.includes(location.hash)) revealSettings(true);
+  window.addEventListener('hashchange', ()=>{ if(EDIT_HASHES.includes(location.hash)) revealSettings(true); });
+  document.getElementById('edit-link').addEventListener('click', ()=> revealSettings(true));
 
   initDiaryForm();
   initCollectionForms();
