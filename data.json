@@ -215,6 +215,13 @@
           "year": "2002",
           "poster": "https://image.tmdb.org/t/p/w342/5JvqUXFdF7ZNbbSOdYI8IStJcj9.jpg",
           "note": "96 minutos em um único plano-sequência ininterrupto, com mais de 2 mil atores, dentro do Museu Hermitage. Um feito logístico que só existe por causa da câmera digital."
+        },
+        {
+          "title": "Mad Max: Estrada da Fúria",
+          "director": "George Miller",
+          "year": "2015",
+          "poster": "https://image.tmdb.org/t/p/w342/tH64gzAHDFg7EFcgfkkZyHdGM5P.jpg",
+          "note": "O extremo oposto: efeitos majoritariamente práticos, centenas de veículos reais destruídos no deserto, orçamento de estúdio hollywoodiano."
         }
       ]
     }
