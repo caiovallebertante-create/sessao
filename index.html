@@ -207,6 +207,46 @@
   .modal h4{font-family:'Fraunces',serif; font-weight:500; font-size:20px; margin-bottom:18px;}
   .modal-actions{display:flex; justify-content:flex-end; gap:12px; margin-top:22px;}
 
+  /* ---------- YEAR HEADINGS (diário) ---------- */
+  .year-head{
+    font-family:'Fraunces', serif; font-weight:500; font-size:20px; color:var(--text-muted);
+    letter-spacing:0.02em; margin:40px 0 2px; padding-top:14px;
+  }
+  .year-head:first-child{margin-top:6px;}
+
+  /* offset para o header fixo ao pular para uma âncora */
+  #anotacoes, #colecoes, #referencias, #manifesto, .year-head, .collection{ scroll-margin-top:96px; }
+
+  /* ---------- RAIL (navegação rápida à direita) ---------- */
+  .rail{
+    position:fixed; right:16px; top:50%; transform:translateY(-50%);
+    z-index:15; display:flex; flex-direction:column; align-items:flex-end; gap:1px;
+  }
+  .rail-item{
+    display:flex; flex-direction:row-reverse; align-items:center; gap:10px;
+    padding:5px 0; cursor:pointer; background:none; border:0; text-decoration:none;
+  }
+  .rail-tick{
+    display:block; height:1px; width:16px; background:var(--line); flex-shrink:0;
+    transition:width .18s ease, background .18s ease;
+  }
+  .rail-sub .rail-tick{ width:9px; }
+  .rail-label{
+    font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; white-space:nowrap;
+    max-width:230px; overflow:hidden; text-overflow:ellipsis;
+    color:var(--text-muted); background:rgba(20,23,28,0.92); border:1px solid var(--line);
+    border-radius:2px; padding:2px 8px;
+    opacity:0; transform:translateX(6px); pointer-events:none;
+    transition:opacity .16s ease, transform .16s ease;
+  }
+  .rail:hover .rail-label{ opacity:1; transform:none; }
+  .rail-item:hover .rail-tick{ width:26px; background:var(--text-muted); }
+  .rail-item.active .rail-tick{ width:30px; background:var(--accent); }
+  .rail-sub.active .rail-tick{ width:20px; }
+  .rail-item.active .rail-label{ color:var(--accent); border-color:var(--accent-soft); }
+  .rail-sub[hidden]{ display:none; }
+  @media (max-width:1180px){ .rail{ display:none; } }
+
   /* ---------- MANIFESTO ---------- */
   .manifesto{padding:76px 0; border-bottom:1px solid var(--line); background:var(--bg-alt);}
   .manifesto .wrap{display:grid; grid-template-columns:1fr 1fr; gap:64px;}
@@ -240,6 +280,8 @@
     </div>
   </nav>
 </header>
+
+<nav class="rail" id="rail" aria-label="Navegação rápida da página"></nav>
 
 <section class="hero">
   <div class="wrap hero-grid">
@@ -743,6 +785,7 @@ function renderAll(){
   renderCollections();
   refreshSelects();
   renderVideos();
+  buildRail();
 }
 
 /* ---------- diary ---------- */
@@ -764,12 +807,23 @@ function diaryEntryHTML(e, rowId){
     <div class="entry-tag ${tag.cls}">${tag.label}</div>
   </div>`;
 }
+function diaryYear(e){ const y = (e.date || '').slice(0,4); return /^\d{4}$/.test(y) ? y : 's/ data'; }
+function diaryYearId(year){ return 'diario-' + (/^\d{4}$/.test(year) ? year : 'sd'); }
 function renderDiary(){
   const sorted = [...SITE_DATA.diary].sort((a,b)=> (a.date < b.date ? 1 : -1));
-  document.getElementById('diary-list').innerHTML = sorted.map(e=>{
+  let html = '';
+  let lastYear = null;
+  for(const e of sorted){
+    const year = diaryYear(e);
+    if(year !== lastYear){
+      html += `<h3 class="year-head" id="${diaryYearId(year)}">${esc(year)}</h3>`;
+      lastYear = year;
+    }
     const rowId = regRow({ kind:'diary', snap: JSON.stringify(e) });
-    return diaryEntryHTML(e, rowId);
-  }).join('');
+    html += diaryEntryHTML(e, rowId);
+  }
+  document.getElementById('diary-list').innerHTML = html ||
+    '<p style="color:var(--text-muted); font-size:14px; padding:18px 0;">Nenhuma anotação ainda.</p>';
 }
 
 /* ---------- collections ---------- */
@@ -794,7 +848,7 @@ function renderCollections(){
   container.innerHTML = SITE_DATA.collections.map((c,ci)=>{
     const collRow = regRow({ kind:'collection', snap: JSON.stringify(c) });
     return `
-    <section class="collection">
+    <section class="collection" id="col-${escapeAttr(c.id)}">
       <div class="wrap">
         <div class="col-head">
           <div>
@@ -858,6 +912,77 @@ function renderVideos(){
     const rowId = regRow({ kind:'video', snap: JSON.stringify(v) });
     return videoCardHTML(v, rowId);
   }).join('') || `<p style="color:var(--text-muted); font-size:14px;">Nenhum vídeo neste filtro.</p>`;
+}
+
+/* ======================================================================
+   RAIL — navegação rápida à direita (scrollspy de 2 níveis)
+   ====================================================================== */
+let railScrollHandler = null;
+let railUpdate = null;
+
+function railGroups(){
+  const years = [...new Set(SITE_DATA.diary.map(diaryYear))].sort().reverse();
+  return [
+    { id:'anotacoes', label:'Diário',
+      subs: years.map(y => ({ id: diaryYearId(y), label: y })) },
+    { id:'colecoes', label:'Coleções',
+      subs: SITE_DATA.collections.map(c => ({ id: 'col-' + c.id, label: c.name })) },
+    { id:'referencias', label:'Referências', subs: [] },
+    { id:'manifesto', label:'Sobre', subs: [] }
+  ];
+}
+
+function buildRail(){
+  const rail = document.getElementById('rail');
+  if(!rail) return;
+  rail.innerHTML = railGroups().map(g => `
+    <a class="rail-item" href="#${escapeAttr(g.id)}" data-target="${escapeAttr(g.id)}" aria-label="${escapeAttr(g.label)}">
+      <span class="rail-tick"></span><span class="rail-label">${esc(g.label)}</span>
+    </a>
+    ${g.subs.map(s => `
+    <a class="rail-item rail-sub" href="#${escapeAttr(s.id)}" data-target="${escapeAttr(s.id)}" data-parent="${escapeAttr(g.id)}" aria-label="${escapeAttr(s.label)}" hidden>
+      <span class="rail-tick"></span><span class="rail-label">${esc(s.label)}</span>
+    </a>`).join('')}
+  `).join('');
+
+  setupRailSpy();
+}
+
+function setupRailSpy(){
+  const rail = document.getElementById('rail');
+  const items = [...rail.querySelectorAll('.rail-item')];
+  const targets = items
+    .map(btn => ({ btn, el: document.getElementById(btn.dataset.target), parent: btn.dataset.parent || null }))
+    .filter(t => t.el);
+
+  let ticking = false;
+  railUpdate = function(){
+    ticking = false;
+    if(!targets.length) return;
+    const line = 130;
+    let current = targets[0];
+    for(const t of targets){
+      if(t.el.getBoundingClientRect().top - line <= 0) current = t;
+    }
+    const activeTopId = current.parent || current.btn.dataset.target;
+
+    items.forEach(b => b.classList.remove('active'));
+    current.btn.classList.add('active');
+    if(current.parent){
+      const p = rail.querySelector(`.rail-item[data-target="${CSS.escape(current.parent)}"]`);
+      if(p) p.classList.add('active');
+    }
+    rail.querySelectorAll('.rail-sub').forEach(s => {
+      s.hidden = (s.dataset.parent !== activeTopId);
+    });
+  };
+
+  if(railScrollHandler) window.removeEventListener('scroll', railScrollHandler);
+  railScrollHandler = function(){
+    if(!ticking){ ticking = true; requestAnimationFrame(railUpdate); }
+  };
+  window.addEventListener('scroll', railScrollHandler, { passive:true });
+  railUpdate();
 }
 
 /* ---------- selects (rebuilt on every render, listeners survive) ---------- */
@@ -1301,6 +1426,10 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   initVideoForm();
   initRowTools();
   initModal();
+
+  // rail: recalcula posições quando o layout muda
+  window.addEventListener('resize', ()=>{ if(railUpdate) railUpdate(); });
+  window.addEventListener('load', ()=>{ if(railUpdate) railUpdate(); });
 });
 </script>
 
