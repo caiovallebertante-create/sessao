@@ -5,15 +5,7 @@
       "id": "narradores",
       "name": "Narradores que mentem para si mesmos",
       "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
-      "films": [
-        {
-          "title": "Crepúsculo dos Deuses",
-          "director": "Billy Wilder",
-          "year": "1950",
-          "poster": "",
-          "note": "Narrado por um morto — o ponto de vista mais literalmente póstumo do cinema clássico."
-        }
-      ]
+      "films": []
     },
     {
       "id": "memoria",
