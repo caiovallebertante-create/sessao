@@ -7,13 +7,6 @@
       "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
       "films": [
         {
-          "title": "Rashomon",
-          "director": "Akira Kurosawa",
-          "year": "1950",
-          "poster": "",
-          "note": "Quatro testemunhas, quatro verdades incompatíveis — o filme que deu nome ao problema antes de ele ter nome."
-        },
-        {
           "title": "Clube da Luta",
           "director": "David Fincher",
           "year": "1999",
