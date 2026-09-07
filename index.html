@@ -39,8 +39,16 @@
   header{position:sticky; top:0; z-index:20; background:rgba(20,23,28,0.9); backdrop-filter:blur(8px); border-bottom:1px solid var(--line);}
   nav{display:flex; align-items:center; justify-content:space-between; padding:20px 32px; max-width:1180px; margin:0 auto; flex-wrap:wrap; gap:12px;}
   .logo{font-family:'Fraunces', serif; font-size:22px; font-weight:600;}
-  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--text-muted); flex-wrap:wrap;}
+  .navlinks{display:flex; align-items:center; gap:28px; font-size:14px; color:var(--text-muted); flex-wrap:wrap;}
   .navlinks a:hover{color:var(--accent);}
+  .edit-toggle{
+    font-family:'Libre Franklin', sans-serif; font-size:16px; line-height:1;
+    width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); border-radius:3px; background:none; color:var(--text-muted);
+    cursor:pointer; padding:0; margin-left:-12px; transition:color .15s ease, border-color .15s ease;
+  }
+  .edit-toggle:hover{color:var(--accent); border-color:var(--accent-soft);}
+  body.edit-open .edit-toggle{color:var(--accent); border-color:var(--accent-soft);}
 
   /* ---------- HERO ---------- */
   .hero{padding:88px 0 56px; border-bottom:1px solid var(--line);}
@@ -228,6 +236,7 @@
       <a href="#colecoes">Coleções</a>
       <a href="#referencias">Referências</a>
       <a href="#manifesto">Sobre</a>
+      <button class="edit-toggle" id="edit-toggle" type="button" aria-label="Modo edição" aria-expanded="false" title="Modo edição">&#8722;</button>
     </div>
   </nav>
 </header>
@@ -513,7 +522,7 @@
 <footer>
   <div class="wrap">
     <span>Sessão — diário de cinema</span>
-    <span>Atualizado sem pressa, filme por filme · <a href="#editar" id="edit-link" style="color:var(--text-muted); text-decoration:underline; text-underline-offset:2px;">editar</a></span>
+    <span>Atualizado sem pressa, filme por filme</span>
   </div>
 </footer>
 
@@ -619,7 +628,10 @@ function saveGhToken(t){
   updateTokenStatus(); applyAdminMode(); renderAll();
 }
 function isAdmin(){ return !!(getGhToken() && getGhRepo()); }
-function applyAdminMode(){ document.body.classList.toggle('is-admin', isAdmin()); }
+// modo edição = credenciais válidas E o botão +/− do header ligado
+function applyAdminMode(){
+  document.body.classList.toggle('is-admin', isAdmin() && document.body.classList.contains('edit-open'));
+}
 function updateRepoStatus(){
   const el = document.getElementById('gh-repo-status');
   if(getGhRepo()){ el.textContent = 'salvo ✓'; el.classList.add('ok'); }
@@ -1216,7 +1228,38 @@ function initModal(){
    ====================================================================== */
 document.addEventListener('DOMContentLoaded', async ()=>{
   await loadSiteData();
-  applyAdminMode();
+
+  // ---- modo edição: botão +/− no header, ao lado dos links ----
+  const EDIT_OPEN_STORAGE = 'sessao_edit_open';
+  const EDIT_HASHES = ['#editar','#config','#admin','#configuracao'];
+  const settingsPanel = document.getElementById('settings-panel');
+  const editToggle = document.getElementById('edit-toggle');
+  let editOpen = false;
+  try{ editOpen = localStorage.getItem(EDIT_OPEN_STORAGE) === '1'; }catch(e){}
+  if(EDIT_HASHES.includes(location.hash)) editOpen = true;
+
+  function applyEditToggle(scrollToPanel){
+    document.body.classList.toggle('edit-open', editOpen);
+    editToggle.textContent = editOpen ? '+' : '−';
+    editToggle.setAttribute('aria-expanded', editOpen ? 'true' : 'false');
+    editToggle.title = editOpen ? 'Sair do modo edição' : 'Modo edição';
+    settingsPanel.hidden = !editOpen;
+    if(editOpen) settingsPanel.open = !isAdmin();   // aberto p/ digitar credenciais; recolhido se já conectado
+    applyAdminMode();
+    if(editOpen && scrollToPanel && !isAdmin()){
+      settingsPanel.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  }
+  function setEditOpen(v, scrollToPanel){
+    editOpen = v;
+    try{ localStorage.setItem(EDIT_OPEN_STORAGE, v ? '1' : '0'); }catch(e){}
+    applyEditToggle(scrollToPanel);
+    if(v && isAdmin()) verifyAccess(true);
+  }
+  editToggle.addEventListener('click', ()=> setEditOpen(!editOpen, true));
+  window.addEventListener('hashchange', ()=>{ if(EDIT_HASHES.includes(location.hash)) setEditOpen(true, true); });
+
+  applyEditToggle(false);
   renderAll();
 
   document.getElementById('video-filter-select').addEventListener('change', renderVideos);
@@ -1233,6 +1276,7 @@ document.addEventListener('DOMContentLoaded', async ()=>{
   document.getElementById('gh-repo-save').addEventListener('click', ()=>{
     saveGhRepo(document.getElementById('gh-repo-input').value.trim());
     toast('Repositório salvo.');
+    applyEditToggle(false);
     verifyAccess();
   });
 
@@ -1243,29 +1287,14 @@ document.addEventListener('DOMContentLoaded', async ()=>{
     saveGhToken(t);
     document.getElementById('gh-token-input').value = '';
     toast('Token salvo neste navegador.');
+    applyEditToggle(false);
     verifyAccess();
   });
   document.getElementById('gh-token-clear').addEventListener('click', ()=>{
     saveGhToken('');
     toast('Token removido deste navegador.');
+    applyEditToggle(false);
   });
-
-  // O painel de configuração fica escondido do público.
-  // Aparece se: já é modo edição, ou a URL termina em #editar, ou clicou em "editar" no rodapé.
-  const settingsPanel = document.getElementById('settings-panel');
-  function revealSettings(openIt){
-    settingsPanel.hidden = false;
-    if(openIt) settingsPanel.open = true;
-    settingsPanel.scrollIntoView({ behavior:'smooth', block:'center' });
-  }
-  const EDIT_HASHES = ['#editar','#config','#admin','#configuracao'];
-  if(isAdmin()){
-    settingsPanel.hidden = false;           // visível (recolhido) para poder trocar/limpar o token
-    verifyAccess(true);
-  }
-  if(EDIT_HASHES.includes(location.hash)) revealSettings(true);
-  window.addEventListener('hashchange', ()=>{ if(EDIT_HASHES.includes(location.hash)) revealSettings(true); });
-  document.getElementById('edit-link').addEventListener('click', ()=> revealSettings(true));
 
   initDiaryForm();
   initCollectionForms();
