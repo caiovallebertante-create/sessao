@@ -124,6 +124,13 @@
           "year": "2002",
           "poster": "https://image.tmdb.org/t/p/w342/lhmIskV6vep47d6420QGff7mbbI.jpg",
           "note": "Alerta Vermelho / Infernal Affairs (2002, Andrew Lau e Alan Mak, Hong Kong) e Os Infiltrados (2006, Martin Scorsese, EUA). A estrutura de espiões trocados é idêntica; a versão de Scorsese adiciona humor negro e uma textura muito mais americana."
+        },
+        {
+          "title": "Os Infiltrados",
+          "director": "Martin Scorsese",
+          "year": "2006",
+          "poster": "https://image.tmdb.org/t/p/w342/qtnAwzDapzOML4Q9p7lv2bk5gvz.jpg",
+          "note": ""
         }
       ]
     }
