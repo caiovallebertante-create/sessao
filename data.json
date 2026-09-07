@@ -7,13 +7,6 @@
       "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
       "films": [
         {
-          "title": "Blade Runner",
-          "director": "Ridley Scott",
-          "year": "1982",
-          "poster": "",
-          "note": "Fotografias implantadas como prova de uma infância que nunca aconteceu — a memória como alibi."
-        },
-        {
           "title": "Brilho Eterno de uma Mente sem Lembranças",
           "director": "Michel Gondry",
           "year": "2004",
