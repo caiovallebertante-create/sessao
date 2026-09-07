@@ -2,12 +2,6 @@
   "diary": [],
   "collections": [
     {
-      "id": "narradores",
-      "name": "Narradores que mentem para si mesmos",
-      "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
-      "films": []
-    },
-    {
       "id": "memoria",
       "name": "Cinema como arquivo da memória",
       "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
