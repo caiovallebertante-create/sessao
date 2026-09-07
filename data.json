@@ -110,6 +110,13 @@
           "year": "1972",
           "poster": "https://image.tmdb.org/t/p/w342/xabQ3ljbRpUYbYxJiRfq7WT15p.jpg",
           "note": "Solaris (1972, Andrei Tarkovsky, URSS) e Solaris (2002, Steven Soderbergh, EUA). Mesmo romance de Stanislaw Lem; Tarkovsky faz ficção científica contemplativa de quatro horas, Soderbergh condensa tudo em drama romântico enxuto."
+        },
+        {
+          "title": "Solaris",
+          "director": "Steven Soderbergh",
+          "year": "2002",
+          "poster": "https://image.tmdb.org/t/p/w342/drdrB1hEZmzFlK1xtW5HMxK3LUJ.jpg",
+          "note": ""
         }
       ]
     }
