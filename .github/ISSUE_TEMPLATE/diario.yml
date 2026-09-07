@@ -1,0 +1,44 @@
+name: "🎬 Nova anotação no diário"
+description: Adicionar um filme assistido ao diário
+title: "[diario] nova anotação"
+labels: ["diario"]
+body:
+  - type: input
+    id: titulo
+    attributes:
+      label: Título do filme
+    validations:
+      required: true
+  - type: input
+    id: diretor
+    attributes:
+      label: Diretor
+  - type: input
+    id: ano
+    attributes:
+      label: Ano
+  - type: input
+    id: poster
+    attributes:
+      label: URL do pôster (opcional)
+  - type: input
+    id: data
+    attributes:
+      label: Data que assisti (AAAA-MM-DD)
+    validations:
+      required: true
+  - type: dropdown
+    id: tag
+    attributes:
+      label: Como foi
+      options:
+        - "1a"
+        - "revi"
+        - "abandonei"
+        - "rever"
+    validations:
+      required: true
+  - type: textarea
+    id: nota
+    attributes:
+      label: Sua nota
