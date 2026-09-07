@@ -194,7 +194,15 @@
       "id": "modos-de-producao-do-orcamento-zero-ao-blockbuster",
       "name": "Modos de produção: do orçamento zero ao blockbuster",
       "description": "Filmes escolhidos não pelo tema, mas pela forma radical como foram feitos.",
-      "films": []
+      "films": [
+        {
+          "title": "O Mariachi",
+          "director": "Robert Rodriguez",
+          "year": "1993",
+          "poster": "https://image.tmdb.org/t/p/w342/kPmLM0jXVKRwUUK69qzOEd9K8e2.jpg",
+          "note": "Feito por cerca de US$ 7 mil, com elenco de amigos e câmera emprestada; virou case de estúdio sobre cinema guerrilha."
+        }
+      ]
     }
   ],
   "videos": [
