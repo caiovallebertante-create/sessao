@@ -348,6 +348,13 @@
           "year": "1987",
           "poster": "https://image.tmdb.org/t/p/w342/uZ27cWusfoGFh7sOiUsIENxW48S.jpg",
           "note": "satiriza a fusão homem-máquina pelo ângulo corporativo: um policial morto é \"ressuscitado\" como produto de uma empresa, com anúncios e telejornais sarcásticos entremeados à ação. Terror, comédia e crítica social no mesmo pacote."
+        },
+        {
+          "title": "WALL-E",
+          "director": "Andrew Stanton",
+          "year": "2008",
+          "poster": "https://image.tmdb.org/t/p/w342/qNiwJPVCO4cgiM8LVtxwPV2HxHS.jpg",
+          "note": "animação da Pixar, quase sem diálogo nos primeiros 40 minutos, que inverte o medo do robô: aqui a IA é a última guardiã de afeto e curiosidade num planeta abandonado pelos humanos."
         }
       ]
     }
