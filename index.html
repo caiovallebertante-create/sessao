@@ -176,6 +176,7 @@
   .row-tools button{background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer; padding:0; letter-spacing:0.02em;}
   .row-tools button:hover{color:var(--accent);}
   .row-tools button.danger:hover{color:#c9807a;}
+  .row-tools button.armed{color:#e0857d; font-weight:500;}
   .coll-head-tools{margin:-24px 0 32px;}
 
   /* ---------- TOAST ---------- */
@@ -1068,14 +1069,30 @@ function initVideoForm(){
 /* ======================================================================
    EDIT / DELETE  (delegated on the row tool buttons)
    ====================================================================== */
+let armedDelBtn = null;
+let armedDelTimer;
+function disarmDel(){
+  if(armedDelBtn){ armedDelBtn.textContent = 'remover'; armedDelBtn.classList.remove('armed'); armedDelBtn = null; }
+  clearTimeout(armedDelTimer);
+}
 function initRowTools(){
   document.addEventListener('click', ev=>{
     const btn = ev.target.closest('.row-tools button');
-    if(!btn) return;
+    if(!btn){ disarmDel(); return; }
     const entry = ROW_REGISTRY[+btn.closest('.row-tools').dataset.row];
     if(!entry) return;
-    if(btn.dataset.act === 'del') handleDelete(entry);
-    else openEditModal(entry);
+    if(btn.dataset.act === 'edit'){ disarmDel(); openEditModal(entry); return; }
+    // delete: first click arms the button, second click (same button) confirms
+    if(armedDelBtn === btn){
+      disarmDel();
+      handleDelete(entry);
+    } else {
+      disarmDel();
+      armedDelBtn = btn;
+      btn.textContent = 'confirmar remoção?';
+      btn.classList.add('armed');
+      armedDelTimer = setTimeout(disarmDel, 4000);
+    }
   });
 }
 
@@ -1083,10 +1100,7 @@ function findIdxBySnap(arr, snap){ return arr.findIndex(x => JSON.stringify(x) =
 
 function handleDelete(entry){
   const obj = JSON.parse(entry.snap);
-  const label = entry.kind === 'video' ? (obj.title || obj.youtubeId)
-              : entry.kind === 'collection' ? `a coleção "${obj.name}"`
-              : `"${obj.title}"`;
-  if(!confirm(`Remover ${label}?`)) return;
+  const label = obj.title || obj.name || obj.youtubeId || entry.kind;
   saveToRepo(d => {
     if(entry.kind === 'diary'){
       const i = findIdxBySnap(d.diary, entry.snap);
@@ -1107,7 +1121,7 @@ function handleDelete(entry){
       if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
       c.films.splice(i,1);
     }
-  }, `Remove ${entry.kind}`);
+  }, `Remove: ${label}`);
 }
 
 const MODAL_FIELDS = {
