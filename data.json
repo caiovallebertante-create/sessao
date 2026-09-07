@@ -7,13 +7,6 @@
       "description": "Filmes contados por alguém que não é confiável — não por má-fé, mas porque toda memória edita a própria história.",
       "films": [
         {
-          "title": "Clube da Luta",
-          "director": "David Fincher",
-          "year": "1999",
-          "poster": "",
-          "note": "O narrador constrói uma segunda pessoa para dizer o que ele mesmo não suporta assumir."
-        },
-        {
           "title": "Psicopata Americano",
           "director": "Mary Harron",
           "year": "2000",
