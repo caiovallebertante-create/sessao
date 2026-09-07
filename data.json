@@ -250,6 +250,13 @@
           "year": "1968",
           "poster": "https://image.tmdb.org/t/p/w342/pVCmLuATJ0lQs4Vx1zUJUN0if2A.jpg",
           "note": "A HAL 9000 e a ansiedade da Guerra Fria com a automação."
+        },
+        {
+          "title": "Blade Runner: O Caçador de Andróides",
+          "director": "Ridley Scott",
+          "year": "1982",
+          "poster": "https://image.tmdb.org/t/p/w342/y5ibL0vFnzsRiIHosw0WOfHtIj1.jpg",
+          "note": "Replicantes e neo-noir; a pergunta muda de \"a máquina vai nos dominar\" para \"o que nos diferencia dela\"."
         }
       ]
     }
