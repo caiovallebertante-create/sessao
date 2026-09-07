@@ -137,7 +137,7 @@
   .admin-sub{font-size:12px; color:var(--text-muted); margin:-4px 0 18px; line-height:1.5;}
   .field{margin-bottom:16px;}
   .field label{display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase; letter-spacing:0.03em;}
-  .field input[type=text], .field input[type=date], .field input[type=url], .field textarea, .field select{
+  .field input[type=text], .field input[type=date], .field input[type=url], .field input[type=password], .field textarea, .field select{
     width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text);
     padding:10px 12px; font-family:'Libre Franklin',sans-serif; font-size:14px; border-radius:2px;
   }
@@ -162,17 +162,39 @@
   .tag-picker{display:flex; gap:8px; flex-wrap:wrap;}
   .tag-picker button{padding:7px 13px; font-size:12px; border-radius:2px; border:1px solid var(--line); background:none; color:var(--text-muted); cursor:pointer;}
   .tag-picker button.active{border-color:var(--accent); color:var(--accent);}
-  .pending-list{margin-top:14px; display:flex; flex-direction:column; gap:8px;}
-  .pending-item{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--line); border-radius:2px; font-size:13px;}
-  .pending-item button{background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; flex-shrink:0;}
-  .pending-item button:hover{color:#c9807a;}
-  .code-output{display:none; margin-top:18px;}
-  .code-output pre{background:#0b0d10; border:1px solid var(--line); border-radius:2px; padding:14px; font-size:12px; color:#cdeecb; overflow-x:auto; max-height:260px; white-space:pre-wrap; word-break:break-word;}
-  .copy-row{display:flex; justify-content:space-between; align-items:center; margin-top:8px; gap:12px; flex-wrap:wrap;}
   .hint{font-size:12.5px; color:var(--text-muted); margin-top:6px; line-height:1.55;}
   .key-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
   .key-status{font-size:12px; color:var(--text-muted);}
   .key-status.ok{color:var(--accent);}
+
+  /* ---------- ADMIN MODE GATING ---------- */
+  body:not(.is-admin) .admin-only{display:none !important;}
+  .admin-badge{display:none; font-size:11px; color:var(--accent); border:1px solid var(--accent-soft); border-radius:2px; padding:3px 9px; letter-spacing:0.03em;}
+  body.is-admin .admin-badge{display:inline-block;}
+
+  .row-tools{display:flex; gap:14px; margin-top:10px;}
+  .row-tools button{background:none; border:none; color:var(--text-muted); font-size:12px; cursor:pointer; padding:0; letter-spacing:0.02em;}
+  .row-tools button:hover{color:var(--accent);}
+  .row-tools button.danger:hover{color:#c9807a;}
+  .coll-head-tools{margin:-24px 0 32px;}
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(18px);
+    background:var(--bg-alt-2); border:1px solid var(--line); color:var(--text);
+    padding:12px 20px; border-radius:3px; font-size:13.5px; line-height:1.4;
+    opacity:0; pointer-events:none; transition:opacity .22s ease, transform .22s ease;
+    z-index:80; max-width:90vw; text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+  .toast.err{border-color:#6b4440; color:#e6b8b2;}
+
+  /* ---------- MODAL ---------- */
+  .modal-backdrop{position:fixed; inset:0; background:rgba(9,11,14,0.72); display:flex; align-items:center; justify-content:center; z-index:70; padding:20px;}
+  .modal-backdrop[hidden]{display:none;}
+  .modal{background:var(--bg-alt); border:1px solid var(--line); border-radius:5px; padding:26px; width:480px; max-width:100%; max-height:88vh; overflow-y:auto;}
+  .modal h4{font-family:'Fraunces',serif; font-weight:500; font-size:20px; margin-bottom:18px;}
+  .modal-actions{display:flex; justify-content:flex-end; gap:12px; margin-top:22px;}
 
   /* ---------- MANIFESTO ---------- */
   .manifesto{padding:76px 0; border-bottom:1px solid var(--line); background:var(--bg-alt);}
@@ -197,7 +219,7 @@
 
 <header>
   <nav>
-    <div class="logo">Sessão</div>
+    <div class="logo">Sessão <span class="admin-badge">modo edição</span></div>
     <div class="navlinks">
       <a href="#anotacoes">Diário</a>
       <a href="#colecoes">Coleções</a>
@@ -234,39 +256,74 @@
     <div class="entries" id="diary-list"></div>
 
     <details class="admin-panel" open id="settings-panel">
-      <summary>Configurações (uma vez só)</summary>
+      <summary>Configuração (uma vez só)</summary>
       <div class="admin-body">
-        <div class="field key-field">
-          <label>Chave da API TMDB (grátis, salva só neste navegador)</label>
+        <div class="field">
+          <label>Repositório do GitHub (usuário/repo)</label>
+          <div class="key-row">
+            <input type="text" id="gh-repo-input" placeholder="caiovallebertante-create/sessao">
+            <button class="btn-ghost btn" id="gh-repo-save" type="button">Salvar</button>
+            <span class="key-status" id="gh-repo-status"></span>
+          </div>
+          <p class="hint">O repositório onde estão este site e o <code>data.json</code>.</p>
+        </div>
+
+        <div class="field">
+          <label>Token do GitHub (fine-grained — fica só neste navegador)</label>
+          <div class="key-row">
+            <input type="password" id="gh-token-input" placeholder="github_pat_...">
+            <button class="btn-ghost btn" id="gh-token-save" type="button">Salvar</button>
+            <button class="btn-ghost btn" id="gh-token-clear" type="button">Limpar</button>
+            <span class="key-status" id="gh-token-status"></span>
+          </div>
+          <p class="hint">
+            É o que deixa você adicionar, editar e remover pelos painéis abaixo — sem ele o site fica só de leitura.<br>
+            Gere em <b>github.com/settings/personal-access-tokens/new</b> → <i>Fine-grained</i> → <i>Only select repositories</i> → este repo →
+            <i>Repository permissions</i> → <b>Contents: Read and write</b>. Coloque uma validade (90 dias). Nunca use em computador compartilhado.
+          </p>
+        </div>
+
+        <div class="field">
+          <label>Chave da API TMDB (opcional — só para a busca de filmes)</label>
           <div class="key-row">
             <input type="text" id="tmdb-key-input" placeholder="cole sua chave aqui">
             <button class="btn-ghost btn" id="tmdb-key-save" type="button">Salvar</button>
             <span class="key-status" id="tmdb-key-status">verificando…</span>
           </div>
-          <p class="hint">Pegue grátis em themoviedb.org → crie uma conta → Settings → API → solicite uma chave "Developer". Sem isso a busca automática de filmes não funciona.</p>
-        </div>
-        <div class="field key-field">
-          <label>Repositório do GitHub (usuário/repo)</label>
-          <div class="key-row">
-            <input type="text" id="gh-repo-input" placeholder="seu-usuario/sessao">
-            <button class="btn-ghost btn" id="gh-repo-save" type="button">Salvar</button>
-            <span class="key-status" id="gh-repo-status"></span>
-          </div>
-          <p class="hint">É pra onde os botões "Adicionar" abaixo vão te mandar, com o formulário certo já aberto.</p>
+          <p class="hint">themoviedb.org → conta → Settings → API → chave "Developer". Sem ela dá pra digitar título/diretor/ano à mão.</p>
         </div>
       </div>
     </details>
 
-    <details class="admin-panel">
+    <details class="admin-panel admin-only">
       <summary>Adicionar filme ao diário</summary>
       <div class="admin-body">
-        <p class="admin-sub">Busca o filme numa base de dados real e abre um formulário do GitHub já preenchido — você só confirma o envio, sem editar código.</p>
+        <p class="admin-sub">Busca o filme na base do TMDB (ou preencha à mão) e salva direto no <code>data.json</code>. Aparece na hora.</p>
 
         <div class="field search-wrap">
           <label>Buscar filme</label>
           <input type="text" id="diary-search" placeholder="digite o nome do filme...">
           <div class="search-results" id="diary-results"></div>
           <div class="film-preview" id="diary-preview"></div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label>Título</label>
+            <input type="text" id="diary-title">
+          </div>
+          <div class="field">
+            <label>Diretor</label>
+            <input type="text" id="diary-director">
+          </div>
+          <div class="field" style="max-width:120px;">
+            <label>Ano</label>
+            <input type="text" id="diary-year">
+          </div>
+        </div>
+        <div class="field">
+          <label>URL do pôster (opcional)</label>
+          <input type="text" id="diary-poster">
         </div>
 
         <div class="field-row">
@@ -290,8 +347,7 @@
           <textarea id="diary-note" placeholder="o que ficou depois de ver..."></textarea>
         </div>
 
-        <button class="btn" id="diary-generate" type="button">Abrir formulário no GitHub</button>
-        <p class="hint">Abre uma aba nova já preenchida. É só clicar em "Submit new issue" — o site atualiza sozinho em cerca de 1 minuto.</p>
+        <button class="btn" id="diary-generate" type="button">Salvar no diário</button>
       </div>
     </details>
   </div>
@@ -315,10 +371,10 @@
   <div id="collections-container"></div>
 
   <div class="wrap" style="padding:0 32px 64px;">
-    <details class="admin-panel">
+    <details class="admin-panel admin-only">
       <summary>Criar nova coleção</summary>
       <div class="admin-body">
-        <p class="admin-sub">Cria a coleção vazia — depois use o painel abaixo pra ir adicionando filmes a ela, um de cada vez.</p>
+        <p class="admin-sub">Cria a coleção vazia — depois use o painel abaixo para ir adicionando filmes.</p>
         <div class="field">
           <label>Nome da coleção</label>
           <input type="text" id="coll-name" placeholder="ex.: Cinema que assombra sem fantasma">
@@ -327,15 +383,14 @@
           <label>Descrição da coleção</label>
           <textarea id="coll-desc" placeholder="por que esses filmes estão juntos..."></textarea>
         </div>
-        <button class="btn" id="coll-generate" type="button">Abrir formulário no GitHub</button>
-        <p class="hint">Depois de enviado, o robô cria a coleção e responde na própria issue com o id gerado — ele já aparece nos menus abaixo em cerca de 1 minuto.</p>
+        <button class="btn" id="coll-generate" type="button">Criar coleção</button>
       </div>
     </details>
 
-    <details class="admin-panel">
+    <details class="admin-panel admin-only">
       <summary>Adicionar filme a uma coleção</summary>
       <div class="admin-body">
-        <p class="admin-sub">Busca o filme numa base de dados real e abre o formulário do GitHub já preenchido.</p>
+        <p class="admin-sub">Busca o filme na base do TMDB (ou preencha à mão) e adiciona à coleção escolhida.</p>
         <div class="field">
           <label>Coleção</label>
           <select id="collfilm-collection"></select>
@@ -346,12 +401,29 @@
           <div class="search-results" id="collfilm-results"></div>
           <div class="film-preview" id="collfilm-preview"></div>
         </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Título</label>
+            <input type="text" id="collfilm-title">
+          </div>
+          <div class="field">
+            <label>Diretor</label>
+            <input type="text" id="collfilm-director">
+          </div>
+          <div class="field" style="max-width:120px;">
+            <label>Ano</label>
+            <input type="text" id="collfilm-year">
+          </div>
+        </div>
+        <div class="field">
+          <label>URL do pôster (opcional)</label>
+          <input type="text" id="collfilm-poster">
+        </div>
         <div class="field">
           <label>Nota sobre este filme</label>
           <textarea id="collfilm-note" placeholder="por que ele está nessa coleção..."></textarea>
         </div>
-        <button class="btn" id="collfilm-generate" type="button">Abrir formulário no GitHub</button>
-        <p class="hint">É só confirmar o envio na aba que abrir — o filme entra na coleção sozinho.</p>
+        <button class="btn" id="collfilm-generate" type="button">Adicionar à coleção</button>
       </div>
     </details>
   </div>
@@ -374,7 +446,7 @@
 
     <div class="ref-grid" id="videos-container"></div>
 
-    <details class="admin-panel">
+    <details class="admin-panel admin-only">
       <summary>Adicionar vídeo de referência</summary>
       <div class="admin-body">
         <p class="admin-sub">Cole o link do YouTube, busque os dados automaticamente e relacione a uma coleção e/ou a um filme específico.</p>
@@ -416,8 +488,7 @@
           <textarea id="video-note"></textarea>
         </div>
 
-        <button class="btn" id="video-generate" type="button">Abrir formulário no GitHub</button>
-        <p class="hint">Confirme o envio na aba que abrir — o vídeo entra no arquivo sozinho.</p>
+        <button class="btn" id="video-generate" type="button">Adicionar vídeo</button>
       </div>
     </details>
   </div>
@@ -443,17 +514,39 @@
   </div>
 </footer>
 
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal">
+    <h4 id="modal-title">Editar</h4>
+    <div id="modal-fields"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost btn" id="modal-cancel" type="button">Cancelar</button>
+      <button class="btn" id="modal-save" type="button">Salvar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ======================================================================
-   DADOS DO SITE — vêm de data.json, ao lado deste arquivo no repositório.
-   Toda edição de conteúdo acontece por formulário (issues do GitHub),
-   nunca mexendo neste HTML.
+   Sessão — diário de cinema
+   Conteúdo vive em data.json (ao lado deste arquivo no repositório).
+   O painel "modo edição" grava direto no data.json pela API do GitHub,
+   usando um token fine-grained guardado só neste navegador.
    ====================================================================== */
+
 let SITE_DATA = { diary: [], collections: [], videos: [] };
+
+function normalizeData(d){
+  d.diary = Array.isArray(d.diary) ? d.diary : [];
+  d.collections = Array.isArray(d.collections) ? d.collections : [];
+  d.videos = Array.isArray(d.videos) ? d.videos : [];
+  d.collections.forEach(c => { if(!Array.isArray(c.films)) c.films = []; });
+  return d;
+}
+
 async function loadSiteData(){
   try{
     const res = await fetch('data.json', { cache:'no-store' });
-    SITE_DATA = await res.json();
+    SITE_DATA = normalizeData(await res.json());
   }catch(e){
     console.error('Não consegui carregar data.json', e);
   }
@@ -477,45 +570,172 @@ function paletteClass(title){
   for(let i=0;i<(title||'').length;i++){ h = (h*31 + title.charCodeAt(i)) % 12; }
   return 'p'+(h+1);
 }
-function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
-function esc(s){ return (s||'').replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function escapeAttr(s){ return (s==null?'':String(s)).replace(/"/g,'&quot;'); }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+function slugify(s){
+  return (s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg, isErr){
+  let el = document.getElementById('toast');
+  if(!el){ el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.classList.toggle('err', !!isErr);
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), isErr ? 6500 : 3500);
+}
 
 /* ---------- TMDB key ---------- */
 const TMDB_KEY_STORAGE = 'sessao_tmdb_key';
 function getTmdbKey(){ return localStorage.getItem(TMDB_KEY_STORAGE) || ''; }
-function saveTmdbKey(k){ localStorage.setItem(TMDB_KEY_STORAGE, k); updateKeyStatus(); }
+function saveTmdbKey(k){
+  if(k) localStorage.setItem(TMDB_KEY_STORAGE, k); else localStorage.removeItem(TMDB_KEY_STORAGE);
+  updateKeyStatus();
+}
 function updateKeyStatus(){
   const el = document.getElementById('tmdb-key-status');
-  const key = getTmdbKey();
-  if(key){ el.textContent = 'chave configurada ✓'; el.classList.add('ok'); }
+  if(getTmdbKey()){ el.textContent = 'chave configurada ✓'; el.classList.add('ok'); }
   else { el.textContent = 'nenhuma chave salva'; el.classList.remove('ok'); }
 }
 
-/* ---------- GitHub repo + issue links ---------- */
+/* ---------- GitHub repo + token ---------- */
 const GH_REPO_STORAGE = 'sessao_gh_repo';
-function getGhRepo(){ return localStorage.getItem(GH_REPO_STORAGE) || ''; }
-function saveGhRepo(r){ localStorage.setItem(GH_REPO_STORAGE, r); updateRepoStatus(); }
+const GH_TOKEN_STORAGE = 'sessao_gh_token';
+function getGhRepo(){ return (localStorage.getItem(GH_REPO_STORAGE) || '').trim(); }
+function getGhToken(){ return (localStorage.getItem(GH_TOKEN_STORAGE) || '').trim(); }
+function saveGhRepo(r){
+  if(r) localStorage.setItem(GH_REPO_STORAGE, r); else localStorage.removeItem(GH_REPO_STORAGE);
+  updateRepoStatus(); applyAdminMode(); renderAll();
+}
+function saveGhToken(t){
+  if(t) localStorage.setItem(GH_TOKEN_STORAGE, t); else localStorage.removeItem(GH_TOKEN_STORAGE);
+  updateTokenStatus(); applyAdminMode(); renderAll();
+}
+function isAdmin(){ return !!(getGhToken() && getGhRepo()); }
+function applyAdminMode(){ document.body.classList.toggle('is-admin', isAdmin()); }
 function updateRepoStatus(){
   const el = document.getElementById('gh-repo-status');
-  const repo = getGhRepo();
-  if(repo){ el.textContent = 'salvo ✓'; el.classList.add('ok'); }
-  else { el.textContent = 'configure para os botões funcionarem'; el.classList.remove('ok'); }
+  if(getGhRepo()){ el.textContent = 'salvo ✓'; el.classList.add('ok'); }
+  else { el.textContent = 'obrigatório'; el.classList.remove('ok'); }
 }
-function openGithubIssue(templateFile, fields){
-  const repo = getGhRepo();
-  if(!repo){ alert('Configure o repositório do GitHub em "Configurações", no topo da seção Diário.'); return; }
-  const params = new URLSearchParams();
-  params.set('template', templateFile);
-  Object.entries(fields).forEach(([k,v])=>{ if(v) params.set(k, v); });
-  window.open(`https://github.com/${repo}/issues/new?${params.toString()}`, '_blank');
+function updateTokenStatus(){
+  const el = document.getElementById('gh-token-status');
+  if(getGhToken()){ el.textContent = 'configurado ✓'; el.classList.add('ok'); }
+  else { el.textContent = 'necessário para editar'; el.classList.remove('ok'); }
 }
 
-/* ---------- render: diary ---------- */
+/* ---------- GitHub API (contents) ---------- */
+function ghHeaders(){
+  return {
+    'Authorization': 'Bearer ' + getGhToken(),
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+}
+function b64encodeUnicode(str){
+  const bytes = new TextEncoder().encode(str);
+  let bin = '';
+  bytes.forEach(b => { bin += String.fromCharCode(b); });
+  return btoa(bin);
+}
+function b64decodeUnicode(b64){
+  const bin = atob((b64 || '').replace(/\s/g, ''));
+  const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+async function ghGetData(){
+  const repo = getGhRepo();
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/data.json`, { headers: ghHeaders(), cache:'no-store' });
+  if(!res.ok){
+    let extra = '';
+    if(res.status === 404) extra = ' Confira "usuário/repo" em Configuração.';
+    else if(res.status === 401) extra = ' Token inválido ou expirado.';
+    else if(res.status === 403) extra = ' O token não tem acesso a este repositório.';
+    throw new Error(`Não consegui ler o data.json (HTTP ${res.status}).${extra}`);
+  }
+  const j = await res.json();
+  return { sha: j.sha, data: normalizeData(JSON.parse(b64decodeUnicode(j.content))) };
+}
+async function ghPutData(data, sha, message){
+  const repo = getGhRepo();
+  const res = await fetch(`https://api.github.com/repos/${repo}/contents/data.json`, {
+    method: 'PUT',
+    headers: ghHeaders(),
+    body: JSON.stringify({
+      message,
+      content: b64encodeUnicode(JSON.stringify(data, null, 2) + '\n'),
+      sha
+    })
+  });
+  if(res.status === 409){ const e = new Error('conflito'); e.conflict = true; throw e; }
+  if(!res.ok){
+    let extra = '';
+    if(res.status === 403) extra = ' O token precisa de "Contents: Read and write" neste repositório.';
+    else if(res.status === 401) extra = ' Token inválido ou expirado.';
+    throw new Error(`Falha ao salvar (HTTP ${res.status}).${extra}`);
+  }
+  return res.json();
+}
+async function verifyAccess(silentOk){
+  if(!isAdmin()) return;
+  try{ await ghGetData(); if(!silentOk) toast('Conectado ao repositório ✓'); }
+  catch(e){ toast(e.message, true); }
+}
+
+/* mutate(dataCopy) — altere em memória; jogue Error para abortar com mensagem */
+async function saveToRepo(mutate, message){
+  if(!isAdmin()){ toast('Configure o repositório e o token em "Configuração" primeiro.', true); return false; }
+  toast('Salvando…');
+  for(let attempt = 1; attempt <= 2; attempt++){
+    try{
+      const { sha, data } = await ghGetData();
+      const copy = JSON.parse(JSON.stringify(data));
+      mutate(copy);
+      await ghPutData(copy, sha, message);
+      SITE_DATA = normalizeData(copy);
+      renderAll();
+      toast('Salvo ✓ — no site público publica em ~1 min; aqui já atualizei.');
+      return true;
+    }catch(e){
+      if(e.conflict && attempt === 1) continue;
+      console.error(e);
+      toast(e.message || 'Erro ao salvar.', true);
+      return false;
+    }
+  }
+  return false;
+}
+
+/* ======================================================================
+   RENDER
+   ====================================================================== */
+let ROW_REGISTRY = [];
+function regRow(payload){ ROW_REGISTRY.push(payload); return ROW_REGISTRY.length - 1; }
+function rowTools(rowId){
+  return `<div class="row-tools admin-only" data-row="${rowId}">
+    <button type="button" data-act="edit">editar</button>
+    <button type="button" class="danger" data-act="del">remover</button>
+  </div>`;
+}
+
+function renderAll(){
+  ROW_REGISTRY = [];
+  renderDiary();
+  renderCollections();
+  refreshSelects();
+  renderVideos();
+}
+
+/* ---------- diary ---------- */
 function diaryPosterHTML(e){
-  if(e.poster){ return `<div class="entry-poster"><img src="${e.poster}" alt=""></div>`; }
+  if(e.poster){ return `<div class="entry-poster"><img src="${escapeAttr(e.poster)}" alt=""></div>`; }
   return `<div class="entry-poster ${paletteClass(e.title)}"></div>`;
 }
-function diaryEntryHTML(e){
+function diaryEntryHTML(e, rowId){
   const tag = TAG_META[e.tag] || TAG_META['1a'];
   return `
   <div class="entry">
@@ -524,20 +744,24 @@ function diaryEntryHTML(e){
     <div class="entry-body">
       <h4>${esc(e.title)} <span class="entry-meta">${e.director?esc(e.director)+', ':''}${esc(e.year)}</span></h4>
       ${e.note?`<p>${esc(e.note)}</p>`:''}
+      ${rowTools(rowId)}
     </div>
     <div class="entry-tag ${tag.cls}">${tag.label}</div>
   </div>`;
 }
 function renderDiary(){
   const sorted = [...SITE_DATA.diary].sort((a,b)=> (a.date < b.date ? 1 : -1));
-  document.getElementById('diary-list').innerHTML = sorted.map(diaryEntryHTML).join('');
+  document.getElementById('diary-list').innerHTML = sorted.map(e=>{
+    const rowId = regRow({ kind:'diary', snap: JSON.stringify(e) });
+    return diaryEntryHTML(e, rowId);
+  }).join('');
 }
 
-/* ---------- render: collections ---------- */
+/* ---------- collections ---------- */
 function filmPosterHTML(f){
   if(f.poster){
     return `<div class="poster has-image">
-      <img src="${f.poster}" alt="">
+      <img src="${escapeAttr(f.poster)}" alt="">
       <div class="poster-scrim"></div>
       <div class="poster-overlay">
         <span class="year">${esc(f.year)}</span>
@@ -552,7 +776,9 @@ function filmPosterHTML(f){
 }
 function renderCollections(){
   const container = document.getElementById('collections-container');
-  container.innerHTML = SITE_DATA.collections.map((c,ci)=>`
+  container.innerHTML = SITE_DATA.collections.map((c,ci)=>{
+    const collRow = regRow({ kind:'collection', snap: JSON.stringify(c) });
+    return `
     <section class="collection">
       <div class="wrap">
         <div class="col-head">
@@ -562,33 +788,39 @@ function renderCollections(){
           </div>
           <p>${esc(c.description)}</p>
         </div>
+        <div class="coll-head-tools">${rowTools(collRow)}</div>
         <div class="films">
-          ${c.films.map(f=>`
+          ${c.films.map(f=>{
+            const fr = regRow({ kind:'collfilm', collId:c.id, snap: JSON.stringify(f) });
+            return `
             <div class="film">
               ${filmPosterHTML(f)}
               <div class="film-meta">
                 <div class="dir">${esc(f.director)}</div>
                 ${f.note?`<div class="note">${esc(f.note)}</div>`:''}
+                ${rowTools(fr)}
               </div>
-            </div>`).join('')}
+            </div>`;
+          }).join('')}
         </div>
       </div>
-    </section>`).join('');
+    </section>`;
+  }).join('');
   document.getElementById('stat-collections').textContent = SITE_DATA.collections.length;
 }
 
-/* ---------- render: videos ---------- */
+/* ---------- videos ---------- */
 function collectionLabel(relId){
   if(!relId) return null;
   const c = SITE_DATA.collections.find(x=>x.id===relId);
   return c ? c.name : relId;
 }
-function videoCardHTML(v){
+function videoCardHTML(v, rowId){
   const collLabel = collectionLabel(v.relatedCollection);
   return `
   <div class="ref-card">
     <div class="ref-video">
-      <iframe src="https://www.youtube-nocookie.com/embed/${v.youtubeId}" title="${escapeAttr(v.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(v.youtubeId)}" title="${escapeAttr(v.title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>
     <div>
       ${collLabel?`<span class="video-badge">${esc(collLabel)}</span>`:''}
@@ -597,38 +829,48 @@ function videoCardHTML(v){
     <h4>${esc(v.title)}</h4>
     <div class="ref-channel">${esc(v.channel)}</div>
     ${v.note?`<p class="ref-note">${esc(v.note)}</p>`:''}
+    ${rowTools(rowId)}
   </div>`;
 }
 function renderVideos(){
-  const filter = document.getElementById('video-filter-select').value;
+  const filter = document.getElementById('video-filter-select').value || 'all';
   const list = SITE_DATA.videos.filter(v=>{
     if(filter==='all') return true;
     if(filter==='none') return !v.relatedCollection;
     return v.relatedCollection === filter;
   });
-  document.getElementById('videos-container').innerHTML = list.map(videoCardHTML).join('');
+  document.getElementById('videos-container').innerHTML = list.map(v=>{
+    const rowId = regRow({ kind:'video', snap: JSON.stringify(v) });
+    return videoCardHTML(v, rowId);
+  }).join('') || `<p style="color:var(--text-muted); font-size:14px;">Nenhum vídeo neste filtro.</p>`;
 }
-function populateVideoFilter(){
-  const sel = document.getElementById('video-filter-select');
-  sel.innerHTML = '<option value="all">Todos os vídeos</option>' +
-    SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('') +
-    '<option value="none">Sem coleção (geral)</option>';
-  sel.addEventListener('change', renderVideos);
+
+/* ---------- selects (rebuilt on every render, listeners survive) ---------- */
+function setOptions(id, html){
+  const el = document.getElementById(id);
+  if(!el) return;
+  const prev = el.value;
+  el.innerHTML = html;
+  if([...el.options].some(o => o.value === prev)) el.value = prev;
 }
-function populateVideoRelateSelects(){
-  const collSel = document.getElementById('video-collection');
-  collSel.innerHTML = '<option value="">Nenhuma / geral</option>' +
-    SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
-  const filmSel = document.getElementById('video-film');
+function refreshSelects(){
+  const collOpts = SITE_DATA.collections.map(c=>`<option value="${escapeAttr(c.id)}">${esc(c.name)}</option>`).join('');
+  setOptions('video-filter-select',
+    `<option value="all">Todos os vídeos</option>` + collOpts + `<option value="none">Sem coleção (geral)</option>`);
+  setOptions('video-collection', `<option value="">Nenhuma / geral</option>` + collOpts);
+  setOptions('collfilm-collection', collOpts || `<option value="">— crie uma coleção primeiro —</option>`);
   const titles = new Set();
   SITE_DATA.collections.forEach(c=>c.films.forEach(f=>titles.add(f.title)));
   SITE_DATA.diary.forEach(d=>titles.add(d.title));
-  filmSel.innerHTML = '<option value="">Nenhum filme específico</option>' +
-    [...titles].sort().map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+  setOptions('video-film',
+    `<option value="">Nenhum filme específico</option>` +
+    [...titles].filter(Boolean).sort().map(t=>`<option value="${escapeAttr(t)}">${esc(t)}</option>`).join(''));
 }
 
-/* ---------- generic TMDB search widget ---------- */
-function setupFilmSearch({inputId, resultsId, onSelect}){
+/* ======================================================================
+   TMDB SEARCH WIDGET
+   ====================================================================== */
+function setupFilmSearch({ inputId, resultsId, onSelect }){
   const input = document.getElementById(inputId);
   const results = document.getElementById(resultsId);
   let timer;
@@ -645,7 +887,7 @@ function setupFilmSearch({inputId, resultsId, onSelect}){
 async function searchTmdb(query, resultsEl, onSelect){
   const key = getTmdbKey();
   if(!key){
-    resultsEl.innerHTML = '<div class="search-result-item">Configure sua chave TMDB no primeiro campo acima.</div>';
+    resultsEl.innerHTML = '<div class="search-result-item">Configure sua chave TMDB em "Configuração" — ou preencha os campos à mão.</div>';
     resultsEl.style.display='block';
     return;
   }
@@ -688,26 +930,25 @@ async function searchTmdb(query, resultsEl, onSelect){
 function renderFilmPreview(containerId, film){
   const el = document.getElementById(containerId);
   el.innerHTML = `
-    ${film.poster ? `<img src="${film.poster}">` : ''}
+    ${film.poster ? `<img src="${escapeAttr(film.poster)}">` : ''}
     <div class="fp-info">
       <h5>${esc(film.title)}</h5>
       <div class="fp-meta">${film.director ? esc(film.director) : 'diretor não encontrado'} · ${esc(film.year)||'?'}</div>
     </div>`;
   el.style.display = 'flex';
 }
-function showCode(containerId, codeStr){
-  const el = document.getElementById(containerId);
-  el.querySelector('pre').textContent = codeStr;
-  el.style.display = 'block';
-}
 
-/* ---------- diary form ---------- */
-let diarySelectedFilm = null;
+/* ======================================================================
+   ADD FORMS  (gravam direto no data.json)
+   ====================================================================== */
 let diaryTag = '1a';
 function initDiaryForm(){
   document.getElementById('diary-date').value = new Date().toISOString().slice(0,10);
   setupFilmSearch({ inputId:'diary-search', resultsId:'diary-results', onSelect:(film)=>{
-    diarySelectedFilm = film;
+    document.getElementById('diary-title').value = film.title || '';
+    document.getElementById('diary-director').value = film.director || '';
+    document.getElementById('diary-year').value = film.year || '';
+    document.getElementById('diary-poster').value = film.poster || '';
     renderFilmPreview('diary-preview', film);
   }});
   document.querySelectorAll('#diary-tag-picker button').forEach(btn=>{
@@ -717,59 +958,72 @@ function initDiaryForm(){
       diaryTag = btn.dataset.tag;
     });
   });
-  document.getElementById('diary-generate').addEventListener('click', ()=>{
-    if(!diarySelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
-    const date = document.getElementById('diary-date').value || new Date().toISOString().slice(0,10);
-    const note = document.getElementById('diary-note').value.trim();
-    openGithubIssue('diario.yml', {
-      titulo: diarySelectedFilm.title,
-      diretor: diarySelectedFilm.director || '',
-      ano: diarySelectedFilm.year || '',
-      poster: diarySelectedFilm.poster || '',
-      data: date,
+  document.getElementById('diary-generate').addEventListener('click', async ()=>{
+    const entry = {
+      date: document.getElementById('diary-date').value || new Date().toISOString().slice(0,10),
+      title: document.getElementById('diary-title').value.trim(),
+      director: document.getElementById('diary-director').value.trim(),
+      year: document.getElementById('diary-year').value.trim(),
+      poster: document.getElementById('diary-poster').value.trim(),
       tag: diaryTag,
-      nota: note
-    });
+      note: document.getElementById('diary-note').value.trim()
+    };
+    if(!entry.title){ toast('Preencha ao menos o título.', true); return; }
+    const ok = await saveToRepo(d => { d.diary.push(entry); }, `Diário: ${entry.title}`);
+    if(ok){
+      ['diary-search','diary-title','diary-director','diary-year','diary-poster','diary-note'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('diary-preview').style.display='none';
+    }
   });
 }
 
-/* ---------- collection forms ---------- */
-function populateCollFilmSelect(){
-  const sel = document.getElementById('collfilm-collection');
-  sel.innerHTML = SITE_DATA.collections.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
-}
-let collfilmSelectedFilm = null;
+let collfilmSelectedPoster = '';
 function initCollectionForms(){
-  document.getElementById('coll-generate').addEventListener('click', ()=>{
+  document.getElementById('coll-generate').addEventListener('click', async ()=>{
     const name = document.getElementById('coll-name').value.trim();
     const desc = document.getElementById('coll-desc').value.trim();
-    if(!name){ alert('Dê um nome à coleção primeiro.'); return; }
-    openGithubIssue('colecao-nova.yml', { nome:name, descricao:desc });
+    if(!name){ toast('Dê um nome à coleção primeiro.', true); return; }
+    const id = slugify(name);
+    if(!id){ toast('Esse nome não gera um id válido — use letras/números.', true); return; }
+    const ok = await saveToRepo(d => {
+      if(d.collections.some(c=>c.id===id)) throw new Error('Já existe uma coleção com esse nome.');
+      d.collections.push({ id, name, description: desc, films: [] });
+    }, `Coleção nova: ${name}`);
+    if(ok){ document.getElementById('coll-name').value=''; document.getElementById('coll-desc').value=''; }
   });
 
   setupFilmSearch({ inputId:'collfilm-search', resultsId:'collfilm-results', onSelect:(film)=>{
-    collfilmSelectedFilm = film;
+    document.getElementById('collfilm-title').value = film.title || '';
+    document.getElementById('collfilm-director').value = film.director || '';
+    document.getElementById('collfilm-year').value = film.year || '';
+    document.getElementById('collfilm-poster').value = film.poster || '';
     renderFilmPreview('collfilm-preview', film);
   }});
-  document.getElementById('collfilm-generate').addEventListener('click', ()=>{
+  document.getElementById('collfilm-generate').addEventListener('click', async ()=>{
     const collId = document.getElementById('collfilm-collection').value;
-    if(!collId){ alert('Crie uma coleção primeiro — ainda não há nenhuma disponível.'); return; }
-    if(!collfilmSelectedFilm){ alert('Busque e selecione um filme primeiro.'); return; }
-    const note = document.getElementById('collfilm-note').value.trim();
-    openGithubIssue('colecao-filme.yml', {
-      colecao_id: collId,
-      titulo: collfilmSelectedFilm.title,
-      diretor: collfilmSelectedFilm.director || '',
-      ano: collfilmSelectedFilm.year || '',
-      poster: collfilmSelectedFilm.poster || '',
-      nota: note
-    });
+    if(!collId){ toast('Crie uma coleção primeiro.', true); return; }
+    const film = {
+      title: document.getElementById('collfilm-title').value.trim(),
+      director: document.getElementById('collfilm-director').value.trim(),
+      year: document.getElementById('collfilm-year').value.trim(),
+      poster: document.getElementById('collfilm-poster').value.trim(),
+      note: document.getElementById('collfilm-note').value.trim()
+    };
+    if(!film.title){ toast('Preencha ao menos o título.', true); return; }
+    const ok = await saveToRepo(d => {
+      const c = d.collections.find(x=>x.id===collId);
+      if(!c) throw new Error('A coleção sumiu — recarregue a página.');
+      c.films.push(film);
+    }, `Filme em "${collId}": ${film.title}`);
+    if(ok){
+      ['collfilm-search','collfilm-title','collfilm-director','collfilm-year','collfilm-poster','collfilm-note'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('collfilm-preview').style.display='none';
+    }
   });
 }
 
-/* ---------- video form ---------- */
 function extractYouTubeId(url){
-  const m = (url||'').match(/(?:youtu\.be\/|v=|embed\/)([A-Za-z0-9_-]{11})/);
+  const m = (url||'').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
   if(m) return m[1];
   if((url||'').trim().length === 11) return url.trim();
   return null;
@@ -791,46 +1045,205 @@ function initVideoForm(){
       status.textContent = 'Não consegui buscar automaticamente — preencha título e canal à mão.';
     }
   });
-  document.getElementById('video-generate').addEventListener('click', ()=>{
-    const id = document.getElementById('video-id-hidden').value;
-    if(!id){ alert('Busque os dados do vídeo primeiro.'); return; }
-    openGithubIssue('video.yml', {
-      youtube_id: id,
-      titulo: document.getElementById('video-title').value.trim(),
-      canal: document.getElementById('video-channel').value.trim(),
-      colecao_relacionada: document.getElementById('video-collection').value,
-      filme_relacionado: document.getElementById('video-film').value,
-      nota: document.getElementById('video-note').value.trim()
-    });
+  document.getElementById('video-generate').addEventListener('click', async ()=>{
+    const id = document.getElementById('video-id-hidden').value || extractYouTubeId(document.getElementById('video-url').value);
+    if(!id){ toast('Cole o link e clique em "Buscar dados" primeiro.', true); return; }
+    const v = {
+      youtubeId: id,
+      title: document.getElementById('video-title').value.trim(),
+      channel: document.getElementById('video-channel').value.trim(),
+      note: document.getElementById('video-note').value.trim(),
+      relatedCollection: document.getElementById('video-collection').value || null,
+      relatedFilm: document.getElementById('video-film').value || null
+    };
+    const ok = await saveToRepo(d => { d.videos.push(v); }, `Vídeo: ${v.title || v.youtubeId}`);
+    if(ok){
+      ['video-url','video-title','video-channel','video-note'].forEach(i=>document.getElementById(i).value='');
+      document.getElementById('video-id-hidden').value='';
+      document.getElementById('video-fetch-status').textContent='';
+    }
   });
 }
 
-/* ---------- boot ---------- */
+/* ======================================================================
+   EDIT / DELETE  (delegated on the row tool buttons)
+   ====================================================================== */
+function initRowTools(){
+  document.addEventListener('click', ev=>{
+    const btn = ev.target.closest('.row-tools button');
+    if(!btn) return;
+    const entry = ROW_REGISTRY[+btn.closest('.row-tools').dataset.row];
+    if(!entry) return;
+    if(btn.dataset.act === 'del') handleDelete(entry);
+    else openEditModal(entry);
+  });
+}
+
+function findIdxBySnap(arr, snap){ return arr.findIndex(x => JSON.stringify(x) === snap); }
+
+function handleDelete(entry){
+  const obj = JSON.parse(entry.snap);
+  const label = entry.kind === 'video' ? (obj.title || obj.youtubeId)
+              : entry.kind === 'collection' ? `a coleção "${obj.name}"`
+              : `"${obj.title}"`;
+  if(!confirm(`Remover ${label}?`)) return;
+  saveToRepo(d => {
+    if(entry.kind === 'diary'){
+      const i = findIdxBySnap(d.diary, entry.snap);
+      if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+      d.diary.splice(i,1);
+    } else if(entry.kind === 'video'){
+      const i = findIdxBySnap(d.videos, entry.snap);
+      if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+      d.videos.splice(i,1);
+    } else if(entry.kind === 'collection'){
+      const i = findIdxBySnap(d.collections, entry.snap);
+      if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+      d.collections.splice(i,1);
+    } else if(entry.kind === 'collfilm'){
+      const c = d.collections.find(x=>x.id === entry.collId);
+      if(!c) throw new Error('A coleção sumiu — recarregue a página.');
+      const i = findIdxBySnap(c.films, entry.snap);
+      if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+      c.films.splice(i,1);
+    }
+  }, `Remove ${entry.kind}`);
+}
+
+const MODAL_FIELDS = {
+  diary: [
+    { k:'date', label:'Data', type:'date' },
+    { k:'title', label:'Título' },
+    { k:'director', label:'Diretor' },
+    { k:'year', label:'Ano' },
+    { k:'tag', label:'Como foi', type:'select', options:[['1a','1ª vez'],['revi','revi'],['abandonei','abandonei'],['rever','quero rever']] },
+    { k:'poster', label:'URL do pôster' },
+    { k:'note', label:'Nota', type:'textarea' }
+  ],
+  collfilm: [
+    { k:'title', label:'Título' },
+    { k:'director', label:'Diretor' },
+    { k:'year', label:'Ano' },
+    { k:'poster', label:'URL do pôster' },
+    { k:'note', label:'Nota', type:'textarea' }
+  ],
+  collection: [
+    { k:'name', label:'Nome' },
+    { k:'description', label:'Descrição', type:'textarea' }
+  ],
+  video: [
+    { k:'title', label:'Título' },
+    { k:'channel', label:'Canal' },
+    { k:'youtubeId', label:'ID do YouTube' },
+    { k:'relatedCollection', label:'Coleção relacionada', type:'collselect' },
+    { k:'relatedFilm', label:'Filme relacionado' },
+    { k:'note', label:'Por que é referência', type:'textarea' }
+  ]
+};
+function fieldWrap(label, inner){ return `<div class="field"><label>${esc(label)}</label>${inner}</div>`; }
+function openEditModal(entry){
+  const obj = JSON.parse(entry.snap);
+  const fields = MODAL_FIELDS[entry.kind] || [];
+  document.getElementById('modal-fields').innerHTML = fields.map(f=>{
+    const val = obj[f.k] == null ? '' : String(obj[f.k]);
+    if(f.type === 'textarea') return fieldWrap(f.label, `<textarea data-k="${f.k}">${esc(val)}</textarea>`);
+    if(f.type === 'select')
+      return fieldWrap(f.label, `<select data-k="${f.k}">${f.options.map(o=>`<option value="${escapeAttr(o[0])}" ${o[0]===val?'selected':''}>${esc(o[1])}</option>`).join('')}</select>`);
+    if(f.type === 'collselect')
+      return fieldWrap(f.label, `<select data-k="${f.k}"><option value="">Nenhuma / geral</option>${SITE_DATA.collections.map(c=>`<option value="${escapeAttr(c.id)}" ${c.id===val?'selected':''}>${esc(c.name)}</option>`).join('')}</select>`);
+    return fieldWrap(f.label, `<input type="${f.type==='date'?'date':'text'}" data-k="${f.k}" value="${escapeAttr(val)}">`);
+  }).join('');
+  document.getElementById('modal-title').textContent = 'Editar';
+  const bd = document.getElementById('modal-backdrop');
+  bd.hidden = false;
+  document.getElementById('modal-save').onclick = async ()=>{
+    const patch = {};
+    document.querySelectorAll('#modal-fields [data-k]').forEach(el=>{
+      let v = el.value;
+      if((el.dataset.k === 'relatedCollection' || el.dataset.k === 'relatedFilm') && v === '') v = null;
+      patch[el.dataset.k] = typeof v === 'string' ? v.trim() : v;
+    });
+    const ok = await saveToRepo(d => applyEdit(d, entry, patch), `Edita ${entry.kind}`);
+    if(ok) bd.hidden = true;
+  };
+}
+function applyEdit(d, entry, patch){
+  if(entry.kind === 'diary'){
+    const i = findIdxBySnap(d.diary, entry.snap);
+    if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+    Object.assign(d.diary[i], patch);
+  } else if(entry.kind === 'video'){
+    const i = findIdxBySnap(d.videos, entry.snap);
+    if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+    Object.assign(d.videos[i], patch);
+  } else if(entry.kind === 'collection'){
+    const i = findIdxBySnap(d.collections, entry.snap);
+    if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+    Object.assign(d.collections[i], patch);
+  } else if(entry.kind === 'collfilm'){
+    const c = d.collections.find(x=>x.id === entry.collId);
+    if(!c) throw new Error('A coleção sumiu — recarregue a página.');
+    const i = findIdxBySnap(c.films, entry.snap);
+    if(i < 0) throw new Error('O conteúdo mudou — recarregue a página.');
+    Object.assign(c.films[i], patch);
+  }
+}
+function initModal(){
+  const bd = document.getElementById('modal-backdrop');
+  document.getElementById('modal-cancel').addEventListener('click', ()=> bd.hidden = true);
+  bd.addEventListener('click', ev=>{ if(ev.target === bd) bd.hidden = true; });
+  document.addEventListener('keydown', ev=>{ if(ev.key === 'Escape') bd.hidden = true; });
+}
+
+/* ======================================================================
+   BOOT
+   ====================================================================== */
 document.addEventListener('DOMContentLoaded', async ()=>{
   await loadSiteData();
+  applyAdminMode();
+  renderAll();
 
-  renderDiary();
-  renderCollections();
-  populateVideoFilter();
-  populateVideoRelateSelects();
-  populateCollFilmSelect();
-  renderVideos();
+  document.getElementById('video-filter-select').addEventListener('change', renderVideos);
 
   document.getElementById('tmdb-key-input').value = getTmdbKey();
   updateKeyStatus();
   document.getElementById('tmdb-key-save').addEventListener('click', ()=>{
     saveTmdbKey(document.getElementById('tmdb-key-input').value.trim());
+    toast('Chave do TMDB salva.');
   });
 
   document.getElementById('gh-repo-input').value = getGhRepo();
   updateRepoStatus();
   document.getElementById('gh-repo-save').addEventListener('click', ()=>{
     saveGhRepo(document.getElementById('gh-repo-input').value.trim());
+    toast('Repositório salvo.');
+    verifyAccess();
   });
+
+  updateTokenStatus();
+  document.getElementById('gh-token-save').addEventListener('click', ()=>{
+    const t = document.getElementById('gh-token-input').value.trim();
+    if(!t){ toast('Cole o token antes de salvar.', true); return; }
+    saveGhToken(t);
+    document.getElementById('gh-token-input').value = '';
+    toast('Token salvo neste navegador.');
+    verifyAccess();
+  });
+  document.getElementById('gh-token-clear').addEventListener('click', ()=>{
+    saveGhToken('');
+    toast('Token removido deste navegador.');
+  });
+
+  if(isAdmin()){
+    document.getElementById('settings-panel').removeAttribute('open');
+    verifyAccess(true);
+  }
 
   initDiaryForm();
   initCollectionForms();
   initVideoForm();
+  initRowTools();
+  initModal();
 });
 </script>
 
