@@ -42,13 +42,6 @@
       "description": "Cinema latino-americano onde o fantástico não é fuga da realidade — é o único vocabulário disponível para descrevê-la.",
       "films": [
         {
-          "title": "A Montanha Sagrada",
-          "director": "Alejandro Jodorowsky",
-          "year": "1970",
-          "poster": "",
-          "note": "Alegoria sem tradução direta — o filme se recusa a explicar seus próprios símbolos."
-        },
-        {
           "title": "Memórias do Subdesenvolvimento",
           "director": "Tomás Gutiérrez Alea",
           "year": "1968",
