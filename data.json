@@ -75,7 +75,15 @@
       "id": "roteiros-gemeos-a-mesma-historia-contada-duas-vezes",
       "name": "Roteiros-gêmeos: a mesma história, contada duas vezes",
       "description": "Pares de filmes que compartilham roteiro, premissa ou até título — mas que a mudança de diretor, país e época transforma em obras quase opostas em tom e sentido.",
-      "films": []
+      "films": [
+        {
+          "title": "Insônia",
+          "director": "Erik Skjoldbjærg",
+          "year": "1997",
+          "poster": "https://image.tmdb.org/t/p/w342/yKZQrROpKq75bUhUDH4Rp4RMSAm.jpg",
+          "note": "Insomnia (1997, Erik Skjoldbjærg, Noruega) e seu remake americano Insônia (2002, Christopher Nolan, EUA). Mesmo policial insone perseguido pela culpa; a versão nórdica é gelada e minimalista, a de Nolan é psicológica e mais explicativa."
+        }
+      ]
     }
   ],
   "videos": [
