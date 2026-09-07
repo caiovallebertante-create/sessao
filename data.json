@@ -7,13 +7,6 @@
       "description": "Filmes que tratam lembrança como material físico: algo que se edita, se apaga, se reconstrói em sala de montagem.",
       "films": [
         {
-          "title": "La Jetée",
-          "director": "Chris Marker",
-          "year": "1962",
-          "poster": "",
-          "note": "Um filme quase inteiro em fotografias congeladas."
-        },
-        {
           "title": "Hiroshima Meu Amor",
           "director": "Alain Resnais",
           "year": "1959",
